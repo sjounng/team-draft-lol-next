@@ -1,0 +1,328 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/api/game-records/[gameId]",
+      "regex": "^/api/game\\-records/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPgameId": "nxtPgameId"
+      },
+      "namedRegex": "^/api/game\\-records/(?<nxtPgameId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/game-records/[gameId]/apply",
+      "regex": "^/api/game\\-records/([^/]+?)/apply(?:/)?$",
+      "routeKeys": {
+        "nxtPgameId": "nxtPgameId"
+      },
+      "namedRegex": "^/api/game\\-records/(?<nxtPgameId>[^/]+?)/apply(?:/)?$"
+    },
+    {
+      "page": "/api/game-records/[gameId]/cancel",
+      "regex": "^/api/game\\-records/([^/]+?)/cancel(?:/)?$",
+      "routeKeys": {
+        "nxtPgameId": "nxtPgameId"
+      },
+      "namedRegex": "^/api/game\\-records/(?<nxtPgameId>[^/]+?)/cancel(?:/)?$"
+    },
+    {
+      "page": "/api/game-records/[gameId]/delete",
+      "regex": "^/api/game\\-records/([^/]+?)/delete(?:/)?$",
+      "routeKeys": {
+        "nxtPgameId": "nxtPgameId"
+      },
+      "namedRegex": "^/api/game\\-records/(?<nxtPgameId>[^/]+?)/delete(?:/)?$"
+    },
+    {
+      "page": "/api/invitations/[invitationId]/accept",
+      "regex": "^/api/invitations/([^/]+?)/accept(?:/)?$",
+      "routeKeys": {
+        "nxtPinvitationId": "nxtPinvitationId"
+      },
+      "namedRegex": "^/api/invitations/(?<nxtPinvitationId>[^/]+?)/accept(?:/)?$"
+    },
+    {
+      "page": "/api/invitations/[invitationId]/reject",
+      "regex": "^/api/invitations/([^/]+?)/reject(?:/)?$",
+      "routeKeys": {
+        "nxtPinvitationId": "nxtPinvitationId"
+      },
+      "namedRegex": "^/api/invitations/(?<nxtPinvitationId>[^/]+?)/reject(?:/)?$"
+    },
+    {
+      "page": "/api/pools/[poolId]",
+      "regex": "^/api/pools/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId"
+      },
+      "namedRegex": "^/api/pools/(?<nxtPpoolId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/pools/[poolId]/invite",
+      "regex": "^/api/pools/([^/]+?)/invite(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId"
+      },
+      "namedRegex": "^/api/pools/(?<nxtPpoolId>[^/]+?)/invite(?:/)?$"
+    },
+    {
+      "page": "/api/pools/[poolId]/matches",
+      "regex": "^/api/pools/([^/]+?)/matches(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId"
+      },
+      "namedRegex": "^/api/pools/(?<nxtPpoolId>[^/]+?)/matches(?:/)?$"
+    },
+    {
+      "page": "/api/pools/[poolId]/matches/count",
+      "regex": "^/api/pools/([^/]+?)/matches/count(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId"
+      },
+      "namedRegex": "^/api/pools/(?<nxtPpoolId>[^/]+?)/matches/count(?:/)?$"
+    },
+    {
+      "page": "/api/pools/[poolId]/matches/[matchId]",
+      "regex": "^/api/pools/([^/]+?)/matches/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId",
+        "nxtPmatchId": "nxtPmatchId"
+      },
+      "namedRegex": "^/api/pools/(?<nxtPpoolId>[^/]+?)/matches/(?<nxtPmatchId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/pools/[poolId]/matches/[matchId]/approve",
+      "regex": "^/api/pools/([^/]+?)/matches/([^/]+?)/approve(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId",
+        "nxtPmatchId": "nxtPmatchId"
+      },
+      "namedRegex": "^/api/pools/(?<nxtPpoolId>[^/]+?)/matches/(?<nxtPmatchId>[^/]+?)/approve(?:/)?$"
+    },
+    {
+      "page": "/api/pools/[poolId]/matches/[matchId]/banpick/action",
+      "regex": "^/api/pools/([^/]+?)/matches/([^/]+?)/banpick/action(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId",
+        "nxtPmatchId": "nxtPmatchId"
+      },
+      "namedRegex": "^/api/pools/(?<nxtPpoolId>[^/]+?)/matches/(?<nxtPmatchId>[^/]+?)/banpick/action(?:/)?$"
+    },
+    {
+      "page": "/api/pools/[poolId]/matches/[matchId]/banpick/session",
+      "regex": "^/api/pools/([^/]+?)/matches/([^/]+?)/banpick/session(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId",
+        "nxtPmatchId": "nxtPmatchId"
+      },
+      "namedRegex": "^/api/pools/(?<nxtPpoolId>[^/]+?)/matches/(?<nxtPmatchId>[^/]+?)/banpick/session(?:/)?$"
+    },
+    {
+      "page": "/api/pools/[poolId]/matches/[matchId]/reject",
+      "regex": "^/api/pools/([^/]+?)/matches/([^/]+?)/reject(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId",
+        "nxtPmatchId": "nxtPmatchId"
+      },
+      "namedRegex": "^/api/pools/(?<nxtPpoolId>[^/]+?)/matches/(?<nxtPmatchId>[^/]+?)/reject(?:/)?$"
+    },
+    {
+      "page": "/api/pools/[poolId]/matches/[matchId]/reset-draft",
+      "regex": "^/api/pools/([^/]+?)/matches/([^/]+?)/reset\\-draft(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId",
+        "nxtPmatchId": "nxtPmatchId"
+      },
+      "namedRegex": "^/api/pools/(?<nxtPpoolId>[^/]+?)/matches/(?<nxtPmatchId>[^/]+?)/reset\\-draft(?:/)?$"
+    },
+    {
+      "page": "/api/pools/[poolId]/matches/[matchId]/result",
+      "regex": "^/api/pools/([^/]+?)/matches/([^/]+?)/result(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId",
+        "nxtPmatchId": "nxtPmatchId"
+      },
+      "namedRegex": "^/api/pools/(?<nxtPpoolId>[^/]+?)/matches/(?<nxtPmatchId>[^/]+?)/result(?:/)?$"
+    },
+    {
+      "page": "/api/pools/[poolId]/matches/[matchId]/swap-champions",
+      "regex": "^/api/pools/([^/]+?)/matches/([^/]+?)/swap\\-champions(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId",
+        "nxtPmatchId": "nxtPmatchId"
+      },
+      "namedRegex": "^/api/pools/(?<nxtPpoolId>[^/]+?)/matches/(?<nxtPmatchId>[^/]+?)/swap\\-champions(?:/)?$"
+    },
+    {
+      "page": "/api/pools/[poolId]/members/[userId]",
+      "regex": "^/api/pools/([^/]+?)/members/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId",
+        "nxtPuserId": "nxtPuserId"
+      },
+      "namedRegex": "^/api/pools/(?<nxtPpoolId>[^/]+?)/members/(?<nxtPuserId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/pools/[poolId]/requests",
+      "regex": "^/api/pools/([^/]+?)/requests(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId"
+      },
+      "namedRegex": "^/api/pools/(?<nxtPpoolId>[^/]+?)/requests(?:/)?$"
+    },
+    {
+      "page": "/pools/[poolId]",
+      "regex": "^/pools/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId"
+      },
+      "namedRegex": "^/pools/(?<nxtPpoolId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/pools/[poolId]/matches",
+      "regex": "^/pools/([^/]+?)/matches(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId"
+      },
+      "namedRegex": "^/pools/(?<nxtPpoolId>[^/]+?)/matches(?:/)?$"
+    },
+    {
+      "page": "/pools/[poolId]/matches/[matchId]/approve",
+      "regex": "^/pools/([^/]+?)/matches/([^/]+?)/approve(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId",
+        "nxtPmatchId": "nxtPmatchId"
+      },
+      "namedRegex": "^/pools/(?<nxtPpoolId>[^/]+?)/matches/(?<nxtPmatchId>[^/]+?)/approve(?:/)?$"
+    },
+    {
+      "page": "/pools/[poolId]/matches/[matchId]/banpick",
+      "regex": "^/pools/([^/]+?)/matches/([^/]+?)/banpick(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId",
+        "nxtPmatchId": "nxtPmatchId"
+      },
+      "namedRegex": "^/pools/(?<nxtPpoolId>[^/]+?)/matches/(?<nxtPmatchId>[^/]+?)/banpick(?:/)?$"
+    },
+    {
+      "page": "/pools/[poolId]/matches/[matchId]/result",
+      "regex": "^/pools/([^/]+?)/matches/([^/]+?)/result(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId",
+        "nxtPmatchId": "nxtPmatchId"
+      },
+      "namedRegex": "^/pools/(?<nxtPpoolId>[^/]+?)/matches/(?<nxtPmatchId>[^/]+?)/result(?:/)?$"
+    },
+    {
+      "page": "/pools/[poolId]/teams/create",
+      "regex": "^/pools/([^/]+?)/teams/create(?:/)?$",
+      "routeKeys": {
+        "nxtPpoolId": "nxtPpoolId"
+      },
+      "namedRegex": "^/pools/(?<nxtPpoolId>[^/]+?)/teams/create(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/dashboard",
+      "regex": "^/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard(?:/)?$"
+    },
+    {
+      "page": "/favicon.ico",
+      "regex": "^/favicon\\.ico(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/invitations",
+      "regex": "^/invitations(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/invitations(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
+      "page": "/pools/create",
+      "regex": "^/pools/create(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/pools/create(?:/)?$"
+    },
+    {
+      "page": "/profile",
+      "regex": "^/profile(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/profile(?:/)?$"
+    },
+    {
+      "page": "/records",
+      "regex": "^/records(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/records(?:/)?$"
+    },
+    {
+      "page": "/register",
+      "regex": "^/register(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/register(?:/)?$"
+    },
+    {
+      "page": "/tiers",
+      "regex": "^/tiers(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/tiers(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

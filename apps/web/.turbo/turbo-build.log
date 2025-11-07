@@ -1,0 +1,83 @@
+
+> web@0.1.0 build /Users/junwoo/Documents/react/team-draft-lol-next/apps/web
+> next build
+
+   ▲ Next.js 15.5.4
+   - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 1816ms
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/30) ...
+   Generating static pages (7/30) 
+   Generating static pages (14/30) 
+   Generating static pages (22/30) 
+ ✓ Generating static pages (30/30)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                                   Size  First Load JS
+┌ ○ /                                                      2.07 kB         107 kB
+├ ○ /_not-found                                              999 B         103 kB
+├ ƒ /api/auth/login                                          227 B         102 kB
+├ ƒ /api/auth/logout                                         227 B         102 kB
+├ ƒ /api/auth/me                                             227 B         102 kB
+├ ƒ /api/auth/register                                       227 B         102 kB
+├ ƒ /api/champions                                           227 B         102 kB
+├ ƒ /api/game-records                                        227 B         102 kB
+├ ƒ /api/game-records/[gameId]                               227 B         102 kB
+├ ƒ /api/game-records/[gameId]/apply                         227 B         102 kB
+├ ƒ /api/game-records/[gameId]/cancel                        227 B         102 kB
+├ ƒ /api/game-records/[gameId]/delete                        227 B         102 kB
+├ ƒ /api/invitations                                         227 B         102 kB
+├ ƒ /api/invitations/[invitationId]/accept                   227 B         102 kB
+├ ƒ /api/invitations/[invitationId]/reject                   227 B         102 kB
+├ ƒ /api/pools                                               227 B         102 kB
+├ ƒ /api/pools/[poolId]                                      227 B         102 kB
+├ ƒ /api/pools/[poolId]/invite                               227 B         102 kB
+├ ƒ /api/pools/[poolId]/matches                              227 B         102 kB
+├ ƒ /api/pools/[poolId]/matches/[matchId]                    227 B         102 kB
+├ ƒ /api/pools/[poolId]/matches/[matchId]/approve            227 B         102 kB
+├ ƒ /api/pools/[poolId]/matches/[matchId]/banpick/action     227 B         102 kB
+├ ƒ /api/pools/[poolId]/matches/[matchId]/banpick/session    227 B         102 kB
+├ ƒ /api/pools/[poolId]/matches/[matchId]/reject             227 B         102 kB
+├ ƒ /api/pools/[poolId]/matches/[matchId]/reset-draft        227 B         102 kB
+├ ƒ /api/pools/[poolId]/matches/[matchId]/result             227 B         102 kB
+├ ƒ /api/pools/[poolId]/matches/[matchId]/swap-champions     227 B         102 kB
+├ ƒ /api/pools/[poolId]/matches/count                        227 B         102 kB
+├ ƒ /api/pools/[poolId]/members/[userId]                     227 B         102 kB
+├ ƒ /api/pools/[poolId]/requests                             227 B         102 kB
+├ ƒ /api/pools/join                                          227 B         102 kB
+├ ƒ /api/pools/search                                        227 B         102 kB
+├ ƒ /api/profile                                             227 B         102 kB
+├ ƒ /api/records                                             227 B         102 kB
+├ ƒ /api/teams/generate                                      227 B         102 kB
+├ ƒ /api/teams/reroll                                        227 B         102 kB
+├ ƒ /api/tiers                                               227 B         102 kB
+├ ƒ /api/users/me/champions                                  227 B         102 kB
+├ ƒ /api/users/search                                        227 B         102 kB
+├ ○ /dashboard                                             4.28 kB         110 kB
+├ ○ /invitations                                           2.13 kB         107 kB
+├ ○ /login                                                  1.8 kB         107 kB
+├ ƒ /pools/[poolId]                                         5.2 kB         111 kB
+├ ƒ /pools/[poolId]/matches                                6.04 kB         111 kB
+├ ƒ /pools/[poolId]/matches/[matchId]/approve               2.9 kB         108 kB
+├ ƒ /pools/[poolId]/matches/[matchId]/banpick              4.11 kB         106 kB
+├ ƒ /pools/[poolId]/matches/[matchId]/result               3.37 kB         109 kB
+├ ƒ /pools/[poolId]/teams/create                           5.68 kB         111 kB
+├ ○ /pools/create                                          2.37 kB         108 kB
+├ ○ /profile                                               4.07 kB         109 kB
+├ ○ /records                                               2.58 kB         108 kB
+├ ○ /register                                              3.44 kB         109 kB
+└ ○ /tiers                                                 2.72 kB         108 kB
++ First Load JS shared by all                               102 kB
+  ├ chunks/543ab1a5-e4008b7b031b958d.js                    54.2 kB
+  ├ chunks/6299-91974862256f4ba8.js                        45.8 kB
+  └ other shared chunks (total)                            1.92 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
