@@ -8,9 +8,15 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false, // TypeScript 에러는 체크
   },
   images: {
-    domains: ['ddragon.leagueoflegends.com'], // 챔피언 이미지 외부 도메인 허용
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ddragon.leagueoflegends.com',
+      },
+    ],
   },
   reactStrictMode: true,
+  output: 'standalone', // Vercel 배포를 위한 standalone 출력
 };
 
 export default nextConfig;
