@@ -16,7 +16,6 @@ const nextConfig: NextConfig = {
     ],
   },
   reactStrictMode: true,
-  output: 'standalone', // Vercel 배포를 위한 standalone 출력
 };
 
 export default nextConfig;
