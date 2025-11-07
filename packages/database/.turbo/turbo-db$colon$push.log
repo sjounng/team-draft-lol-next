@@ -1,0 +1,17 @@
+
+> @repo/database@0.0.0 db:push /Users/junwoo/Documents/react/team-draft-lol-next/packages/database
+> prisma db push
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "postgres", schema "public" at "aws-1-ap-northeast-2.pooler.supabase.com:5432"
+
+Error: 
+⚠️ We found changes that cannot be executed:
+
+  • Added the required column `position` to the `global_champion_stats` table without a default value. There are 10 rows in this table, it is not possible to execute this step.
+
+You may use the --force-reset flag to drop the database before push like prisma db push --force-reset
+All data will be lost.
+      
+ ELIFECYCLE  Command failed with exit code 1.

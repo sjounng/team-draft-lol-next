@@ -1,0 +1,215 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String   @id @default(uuid()) @db.Uuid
+  username      String   @unique
+  email         String   @unique
+  password      String // Hashed password
+  name          String? // Display name for games
+  riotId        String?  @map("riot_id") // Riot Game Name (e.g., "HideOnBush")
+  riotTag       String?  @map("riot_tag") // Riot Tag (e.g., "KR1")
+  mainLane      String?  @map("main_lane") // TOP, JGL, MID, ADC, SUP
+  subLane       String?  @map("sub_lane")
+  score         Int      @default(0)
+  winLossStreak Int      @default(0) @map("win_loss_streak")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  // Relations
+  ownedPools          Pool[]             @relation("PoolOwner")
+  poolMemberships     PoolMember[]
+  gameRecords         UserGameRecord[]
+  sentInvitations     Invitation[]       @relation("InvitationSender")
+  receivedInvitations Invitation[]       @relation("InvitationReceiver")
+  championStats       UserChampionStat[]
+
+  @@map("users")
+}
+
+model Pool {
+  poolId    BigInt   @id @default(autoincrement()) @map("pool_id")
+  ownerId   String   @map("owner_id") @db.Uuid
+  name      String
+  tag       String   @unique // Unique tag for pool (e.g., "A1B2")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  owner         User               @relation("PoolOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  memberships   PoolMember[]
+  gameRecords   GameRecord[]
+  invitations   Invitation[]
+  championStats UserChampionStat[]
+
+  @@map("pools")
+}
+
+model GameRecord {
+  gameId       BigInt   @id @default(autoincrement()) @map("game_id")
+  creatorId    String   @map("creator_id") @db.Uuid // User who created this record
+  poolId       BigInt   @map("pool_id")
+  status       String   @default("DRAFT_PENDING") @map("status") // DRAFT_PENDING, DRAFT_COMPLETE, RESULT_PENDING, COMPLETED
+  team1Data    String   @map("team1_data") @db.Text // JSON string of team 1 composition
+  team2Data    String   @map("team2_data") @db.Text // JSON string of team 2 composition
+  banPickData  String?  @map("ban_pick_data") @db.Text // JSON string of ban/pick data (optional)
+  team1Won     Boolean? @map("team1_won") // Null until result is entered
+  team1Kills   Int      @default(0) @map("team1_kills")
+  team2Kills   Int      @default(0) @map("team2_kills")
+  team1Gold    Int      @default(0) @map("team1_gold")
+  team2Gold    Int      @default(0) @map("team2_gold")
+  gameDuration Int?     @map("game_duration") // Game duration in seconds
+  isApplied    Boolean  @default(false) @map("is_applied")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  pool           Pool             @relation(fields: [poolId], references: [poolId], onDelete: Cascade)
+  userRecords    UserGameRecord[]
+  banPickSession BanPickSession?
+
+  @@map("game_records")
+}
+
+model UserGameRecord {
+  recordId         BigInt  @id @default(autoincrement()) @map("record_id")
+  gameId           BigInt  @map("game_id")
+  userId           String  @map("user_id") @db.Uuid
+  teamNumber       Int     @map("team_number") // 1 or 2
+  assignedPosition String  @map("assigned_position") // TOP, JGL, MID, ADC, SUP
+  originalScore    Int     @default(0) @map("original_score") // User's score at the time of match creation
+  adjustedScore    Int     @default(0) @map("adjusted_score") // Score adjusted for position (main/sub/fill)
+  championId       String? @map("champion_id") // Champion ID from Data Dragon (e.g., "Ahri")
+  championName     String? @map("champion_name") // Champion name in Korean (e.g., "아리")
+  kills            Int     @default(0)
+  deaths           Int     @default(0)
+  assists          Int     @default(0)
+  cs               Int     @default(0)
+
+  // Relations
+  gameRecord GameRecord @relation(fields: [gameId], references: [gameId], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_game_records")
+}
+
+// Join table for Pool <-> User many-to-many (members)
+model PoolMember {
+  poolId BigInt @map("pool_id")
+  userId String @map("user_id") @db.Uuid
+
+  // Relations
+  pool Pool @relation(fields: [poolId], references: [poolId], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([poolId, userId])
+  @@map("pool_members")
+}
+
+// Pool invitation system
+model Invitation {
+  invitationId BigInt   @id @default(autoincrement()) @map("invitation_id")
+  poolId       BigInt   @map("pool_id")
+  senderId     String   @map("sender_id") @db.Uuid // User who sent the invitation/request
+  receiverId   String   @map("receiver_id") @db.Uuid // User who received the invitation/request
+  type         String   @default("INVITATION") // INVITATION (owner->user), REQUEST (user->owner)
+  status       String   @default("PENDING") // PENDING, ACCEPTED, REJECTED
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  pool     Pool @relation(fields: [poolId], references: [poolId], onDelete: Cascade)
+  sender   User @relation("InvitationSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("InvitationReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([poolId, receiverId, type]) // One invitation/request per pool per user per type
+  @@map("invitations")
+}
+
+// User champion statistics (per user, per pool or global)
+model UserChampionStat {
+  statId       BigInt   @id @default(autoincrement()) @map("stat_id")
+  userId       String   @map("user_id") @db.Uuid
+  poolId       BigInt?  @map("pool_id") // null = global stats across all pools
+  championId   String   @map("champion_id") // Champion ID from Data Dragon (e.g., "Ahri")
+  championName String   @map("champion_name") // Champion name in Korean (e.g., "아리")
+  totalGames   Int      @default(0) @map("total_games")
+  wins         Int      @default(0)
+  losses       Int      @default(0)
+  totalKills   Int      @default(0) @map("total_kills")
+  totalDeaths  Int      @default(0) @map("total_deaths")
+  totalAssists Int      @default(0) @map("total_assists")
+  totalCs      Int      @default(0) @map("total_cs")
+  lastPlayedAt DateTime @updatedAt @map("last_played_at")
+
+  // Relations
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pool Pool? @relation(fields: [poolId], references: [poolId], onDelete: Cascade)
+
+  @@unique([userId, poolId, championId]) // One stat record per user per pool per champion
+  @@index([userId, poolId]) // Fast lookup for user's stats in a pool
+  @@index([userId, championId]) // Fast lookup for user's champion history
+  @@map("user_champion_stats")
+}
+
+// Global champion statistics (aggregated across all users, per position)
+model GlobalChampionStat {
+  statId       BigInt   @id @default(autoincrement()) @map("stat_id")
+  championId   String   @map("champion_id") // Champion ID from Data Dragon
+  championName String   @map("champion_name") // Champion name in Korean
+  position     String   @map("position") // TOP, JGL, MID, ADC, SUP
+  totalGames   Int      @default(0) @map("total_games")
+  wins         Int      @default(0)
+  losses       Int      @default(0)
+  totalKills   Int      @default(0) @map("total_kills")
+  totalDeaths  Int      @default(0) @map("total_deaths")
+  totalAssists Int      @default(0) @map("total_assists")
+  totalCs      Int      @default(0) @map("total_cs")
+  pickRate     Float    @default(0) @map("pick_rate") // Percentage of games this champion was picked in this position
+  winRate      Float    @default(0) @map("win_rate") // Win rate percentage
+  avgKda       Float    @default(0) @map("avg_kda") // Average KDA ratio
+  avgKills     Float    @default(0) @map("avg_kills")
+  avgDeaths    Float    @default(0) @map("avg_deaths")
+  avgAssists   Float    @default(0) @map("avg_assists")
+  avgCs        Float    @default(0) @map("avg_cs")
+  tier         String?  @map("tier") // S, A, B, C, D, UNRANKED tier based on win rate and pick rate
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@unique([championId, position]) // Each champion can only have one stat record per position
+  @@index([position, winRate]) // Fast sorting by position and win rate
+  @@index([position, pickRate]) // Fast sorting by position and pick rate
+  @@index([position, tier]) // Fast filtering by position and tier
+  @@map("global_champion_stats")
+}
+
+// Ban-pick session for real-time draft
+model BanPickSession {
+  sessionId          BigInt   @id @default(autoincrement()) @map("session_id")
+  gameId             BigInt   @unique @map("game_id") // One session per game
+  team1ParticipantId String?  @map("team1_participant_id") @db.Uuid // User representing team 1
+  team2ParticipantId String?  @map("team2_participant_id") @db.Uuid // User representing team 2
+  status             String   @default("WAITING_PARTICIPANTS") @map("status") // WAITING_PARTICIPANTS, IN_PROGRESS, COMPLETED, CANCELLED
+  currentTurn        Int      @default(1) @map("current_turn") // Which team's turn (1 or 2)
+  currentPhase       String   @default("BAN") @map("current_phase") // BAN or PICK
+  currentStep        Int      @default(0) @map("current_step") // Step number (0-9 for bans, 0-9 for picks)
+  bansData           String   @default("[]") @map("bans_data") @db.Text // JSON array of {teamNumber, championId, championName}
+  picksData          String   @default("[]") @map("picks_data") @db.Text // JSON array of {teamNumber, userId, position, championId, championName}
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  gameRecord GameRecord @relation(fields: [gameId], references: [gameId], onDelete: Cascade)
+
+  @@index([gameId])
+  @@index([status])
+  @@map("ban_pick_sessions")
+}

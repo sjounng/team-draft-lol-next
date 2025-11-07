@@ -1,0 +1,91 @@
+
+> web@0.1.0 dev /Users/junwoo/Documents/react/team-draft-lol-next/apps/web
+> next dev
+
+ [33m[1m⚠[22m[39m `devIndicators.appIsrStatus` is deprecated and no longer configurable. Please remove it from next.config.ts.
+   [1m[38;2;173;127;168m▲ Next.js 15.5.4[39m[22m
+   - Local:        http://localhost:3000
+   - Network:      http://172.30.1.3:3000
+   - Environments: .env
+
+ [32m[1m✓[22m[39m Starting...
+ [32m[1m✓[22m[39m Ready in 1178ms
+ [37m[1m○[22m[39m Compiling / ...
+ [32m[1m✓[22m[39m Compiled / in 559ms (615 modules)
+ GET / [32m200[39m in 834ms
+ [37m[1m○[22m[39m Compiling /favicon.ico ...
+ [32m[1m✓[22m[39m Compiled /favicon.ico in 792ms (753 modules)
+ GET /favicon.ico [32m200[39m in 896ms
+ GET /api/auth/me [33m401[39m in 948ms
+ GET / [32m200[39m in 186ms
+ GET / [32m200[39m in 136ms
+ GET /api/auth/me [33m401[39m in 34ms
+ GET /favicon.ico [32m200[39m in 41ms
+ [32m[1m✓[22m[39m Compiled /register in 319ms (757 modules)
+ GET /register [32m200[39m in 477ms
+ GET / [32m200[39m in 44ms
+ [32m[1m✓[22m[39m Compiled /api/invitations in 159ms (759 modules)
+ GET /api/invitations [32m200[39m in 423ms
+ GET /api/invitations [32m200[39m in 66ms
+ GET /api/invitations [32m200[39m in 222ms
+ GET /api/invitations [32m200[39m in 69ms
+ [32m[1m✓[22m[39m Compiled /pools/[poolId]/matches/[matchId]/result in 362ms (762 modules)
+ GET /pools/5/matches/3/result [32m200[39m in 1037ms
+ [32m[1m✓[22m[39m Compiled /api/pools/[poolId]/matches/[matchId] in 123ms (522 modules)
+ [32m[1m✓[22m[39m Compiled in 89ms (242 modules)
+ GET /api/auth/me [32m200[39m in 498ms
+ GET /api/invitations [32m200[39m in 73ms
+ GET /api/pools/5/matches/3 [32m200[39m in 971ms
+ [32m[1m✓[22m[39m Compiled /pools/[poolId]/matches in 218ms (781 modules)
+ GET /pools/5/matches [32m200[39m in 624ms
+ GET /api/auth/me [32m200[39m in 116ms
+ GET /api/auth/me [32m200[39m in 230ms
+ [32m[1m✓[22m[39m Compiled /api/pools/[poolId] in 154ms (783 modules)
+ GET /api/pools/5 [32m200[39m in 723ms
+ GET /api/pools/5 [32m200[39m in 626ms
+ [32m[1m✓[22m[39m Compiled /api/pools/[poolId]/matches in 147ms (785 modules)
+ GET /api/pools/5/matches [32m200[39m in 688ms
+ GET /api/pools/5/matches [32m200[39m in 677ms
+ [32m[1m✓[22m[39m Compiled /pools/[poolId] in 215ms (806 modules)
+ GET /pools/5 [32m200[39m in 571ms
+ GET /api/pools/5 [32m200[39m in 207ms
+ [32m[1m✓[22m[39m Compiled /api/pools/[poolId]/matches/count in 464ms (810 modules)
+ GET /api/pools/5 [32m200[39m in 676ms
+ GET /api/pools/5/requests [33m401[39m in 1129ms
+ GET /api/pools/5/requests [33m401[39m in 1135ms
+ GET /api/pools/5/matches/count [32m200[39m in 1267ms
+ GET /api/pools/5/matches/count [32m200[39m in 1279ms
+ GET /api/invitations [32m200[39m in 249ms
+ GET /api/invitations [32m200[39m in 95ms
+ [32m[1m✓[22m[39m Compiled in 498ms (271 modules)
+ GET /pools/5 [32m200[39m in 196ms
+ GET / [32m200[39m in 188ms
+ GET /api/invitations [32m200[39m in 96ms
+ [32m[1m✓[22m[39m Compiled in 762ms (802 modules)
+ GET / [32m200[39m in 302ms
+ GET /pools/5 [32m200[39m in 318ms
+ GET /api/invitations [32m200[39m in 174ms
+ GET /pools/5 [32m200[39m in 187ms
+ [32m[1m✓[22m[39m Compiled /api/auth/me in 93ms (533 modules)
+ GET /api/auth/me [32m200[39m in 271ms
+ GET /api/invitations [32m200[39m in 111ms
+ [32m[1m✓[22m[39m Compiled /api/pools/[poolId]/requests in 185ms (535 modules)
+ [32m[1m✓[22m[39m Compiled (539 modules)
+ GET /api/pools/5/requests [33m401[39m in 616ms
+ GET /api/pools/5/matches/count [32m200[39m in 680ms
+ GET /api/pools/5 [32m200[39m in 682ms
+ GET /api/invitations [32m200[39m in 114ms
+ GET /api/invitations [32m200[39m in 84ms
+ GET /api/invitations [32m200[39m in 98ms
+ GET /api/invitations [32m200[39m in 92ms
+ GET /api/invitations [32m200[39m in 105ms
+ GET /api/invitations [32m200[39m in 187ms
+ GET /api/invitations [32m200[39m in 80ms
+ GET /api/invitations [32m200[39m in 91ms
+ GET /api/invitations [32m200[39m in 93ms
+ GET /api/invitations [32m200[39m in 92ms
+ GET /api/invitations [32m200[39m in 81ms
+ [37m[1m [22m[39m Reload env: .env
+ [32m[1m✓[22m[39m Compiled in 489ms (667 modules)
+ GET / [32m200[39m in 182ms
+[?25h

@@ -1,0 +1,536 @@
+@import "tailwindcss";
+
+:root {
+  /* Railway-inspired dark theme */
+  --background: #0A0A0A;
+  --surface: #18181B;
+  --surface-hover: #27272A;
+  --border: #27272A;
+  --border-hover: #3F3F46;
+
+  /* Text colors */
+  --text-primary: #FAFAFA;
+  --text-secondary: #A1A1AA;
+  --text-muted: #71717A;
+
+  /* Accent colors with gradient */
+  --accent-purple: #A855F7;
+  --accent-blue: #3B82F6;
+  --accent-pink: #EC4899;
+  --accent-cyan: #06B6D4;
+
+  /* Status colors */
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --error: #EF4444;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-border: var(--border);
+  --color-border-hover: var(--border-hover);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
+  --color-accent-purple: var(--accent-purple);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-pink: var(--accent-pink);
+  --color-accent-cyan: var(--accent-cyan);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+}
+
+body {
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* Railway-style gradient text */
+.gradient-text {
+  background: linear-gradient(90deg,
+    var(--accent-purple),
+    var(--accent-blue),
+    var(--accent-pink),
+    var(--accent-purple)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  animation: gradient 4s linear infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Railway-style card */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.card-hover {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.card-hover:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 10px 40px -10px rgba(168, 85, 247, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Railway-style button */
+.btn-primary {
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+  color: white;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  z-index: -1;
+}
+
+.btn-primary:hover::before {
+  opacity: 1;
+  transform: scale(2);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 10px 30px -5px rgba(168, 85, 247, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary {
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-secondary:hover {
+  border-color: var(--border-hover);
+  background: var(--surface-hover);
+}
+
+.btn-secondary:active {
+  transform: scale(0.98);
+}
+
+/* Railway-style input */
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+}
+
+/* Override browser autofill styles */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--surface) inset !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  caret-color: var(--text-primary);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--surface) inset !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  caret-color: var(--text-primary);
+}
+
+/* Railway-style badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--accent-purple);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-hover);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #52525B;
+}
+
+/* Custom Select Dropdown Animation */
+@keyframes dropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-dropdown {
+  animation: dropdown 0.15s ease-out;
+}
+
+/* ==================== Tier Colors ==================== */
+
+/* Tier color variables */
+:root {
+  --tier-iron: #71717A;
+  --tier-bronze: #CD7F32;
+  --tier-silver: #C0C0C0;
+  --tier-gold: #FFD700;
+  --tier-platinum: #4FD1C5;
+  --tier-emerald: #10B981;
+  --tier-diamond: #8B5CF6;
+  --tier-master: #E879F9;
+  --tier-grandmaster: #EF4444;
+  --tier-challenger: #FBBF24;
+}
+
+/* Basic tier colors (Iron - Platinum) */
+.tier-iron {
+  color: var(--tier-iron);
+  font-weight: 700;
+}
+
+.tier-bronze {
+  color: var(--tier-bronze);
+  font-weight: 700;
+}
+
+.tier-silver {
+  color: var(--tier-silver);
+  font-weight: 700;
+}
+
+.tier-gold {
+  color: var(--tier-gold);
+  font-weight: 700;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+.tier-platinum {
+  color: var(--tier-platinum);
+  font-weight: 700;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Gradient tiers (Emerald+) */
+.tier-emerald {
+  background: linear-gradient(135deg, #10B981 0%, #34D399 50%, #10B981 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  font-weight: 700;
+  animation: shimmer 2s ease-in-out infinite, gradient-flow 3s linear infinite;
+}
+
+.tier-diamond {
+  background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 50%, #8B5CF6 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  font-weight: 700;
+  animation: shimmer 2s ease-in-out infinite, gradient-flow 3s linear infinite;
+}
+
+.tier-master {
+  background: linear-gradient(135deg, #E879F9 0%, #F0ABFC 50%, #E879F9 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  font-weight: 700;
+  animation: shimmer 2s ease-in-out infinite, gradient-flow 3s linear infinite;
+}
+
+.tier-grandmaster {
+  background: linear-gradient(135deg, #EF4444 0%, #F97316 50%, #EF4444 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  font-weight: 700;
+  animation: shimmer 2s ease-in-out infinite, gradient-flow 3s linear infinite;
+}
+
+.tier-challenger {
+  background: linear-gradient(135deg, #38BDF8 0%, #FBBF24 30%, #FBBF24 70%, #38BDF8 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  font-weight: 700;
+  animation: shimmer 2s ease-in-out infinite, gradient-flow 3s linear infinite;
+}
+
+/* Shimmer animation (Gold+) */
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Gradient flow animation (Emerald+) */
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* ==================== Tier Backgrounds (Diamond+) ==================== */
+
+/* Diamond tier background */
+.tier-bg-diamond {
+  background: linear-gradient(90deg,
+    rgba(139, 92, 246, 0.15) 0%,
+    rgba(99, 111, 246, 0.15) 12.5%,
+    rgba(59, 130, 246, 0.15) 25%,
+    rgba(99, 111, 246, 0.15) 37.5%,
+    rgba(139, 92, 246, 0.15) 50%,
+    rgba(99, 111, 246, 0.15) 62.5%,
+    rgba(59, 130, 246, 0.15) 75%,
+    rgba(99, 111, 246, 0.15) 87.5%,
+    rgba(139, 92, 246, 0.15) 100%
+  );
+  background-size: 200% auto;
+  border: 1px solid var(--border);
+  animation: gradient-flow 4s linear infinite;
+  transition: all 0.2s ease;
+}
+
+.tier-bg-diamond:hover {
+  border-color: var(--border-hover);
+}
+
+/* Master tier background */
+.tier-bg-master {
+  background: linear-gradient(90deg,
+    rgba(232, 121, 249, 0.15) 0%,
+    rgba(236, 146, 250, 0.125) 12.5%,
+    rgba(240, 171, 252, 0.1) 25%,
+    rgba(236, 146, 250, 0.125) 37.5%,
+    rgba(232, 121, 249, 0.15) 50%,
+    rgba(236, 146, 250, 0.125) 62.5%,
+    rgba(240, 171, 252, 0.1) 75%,
+    rgba(236, 146, 250, 0.125) 87.5%,
+    rgba(232, 121, 249, 0.15) 100%
+  );
+  background-size: 200% auto;
+  border: 1px solid rgba(232, 121, 249, 0.3);
+  animation: gradient-flow 4s linear infinite;
+  transition: all 0.2s ease;
+}
+
+.tier-bg-master:hover {
+  border-color: rgba(232, 121, 249, 0.5);
+  box-shadow: 0 0 20px rgba(232, 121, 249, 0.2);
+}
+
+/* Grandmaster tier background */
+.tier-bg-grandmaster {
+  background: linear-gradient(90deg,
+    rgba(239, 68, 68, 0.15) 0%,
+    rgba(244, 91, 45, 0.125) 12.5%,
+    rgba(249, 115, 22, 0.1) 25%,
+    rgba(244, 91, 45, 0.125) 37.5%,
+    rgba(239, 68, 68, 0.15) 50%,
+    rgba(244, 91, 45, 0.125) 62.5%,
+    rgba(249, 115, 22, 0.1) 75%,
+    rgba(244, 91, 45, 0.125) 87.5%,
+    rgba(239, 68, 68, 0.15) 100%
+  );
+  background-size: 200% auto;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  animation: gradient-flow 4s linear infinite;
+  transition: all 0.2s ease;
+}
+
+.tier-bg-grandmaster:hover {
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+}
+
+/* Challenger tier background */
+.tier-bg-challenger {
+  position: relative;
+  background: linear-gradient(90deg,
+    rgba(56, 189, 248, 0.25) 0%,
+    rgba(153, 190, 142, 0.25) 10%,
+    rgba(251, 191, 36, 0.25) 20%,
+    rgba(251, 191, 36, 0.25) 30%,
+    rgba(153, 190, 142, 0.25) 40%,
+    rgba(56, 189, 248, 0.25) 50%,
+    rgba(153, 190, 142, 0.25) 60%,
+    rgba(251, 191, 36, 0.25) 70%,
+    rgba(251, 191, 36, 0.25) 80%,
+    rgba(153, 190, 142, 0.25) 90%,
+    rgba(56, 189, 248, 0.25) 100%
+  );
+  background-size: 200% auto;
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3), 0 0 30px rgba(56, 189, 248, 0.2);
+  animation: gradient-flow 4s linear infinite;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.tier-bg-challenger::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 60deg,
+    rgba(255, 255, 255, 0.8) 90deg,
+    rgba(255, 255, 255, 0.4) 120deg,
+    transparent 150deg,
+    transparent 360deg
+  );
+  border-radius: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  animation: none;
+}
+
+.tier-bg-challenger:hover::before {
+  opacity: 1;
+  animation: rotate-border 2s linear infinite;
+}
+
+.tier-bg-challenger:hover {
+  border-color: rgba(56, 189, 248, 0.7);
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.5), 0 0 40px rgba(56, 189, 248, 0.3);
+}
+
+@keyframes rotate-border {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==================== Ranking Colors ==================== */
+
+.rank-1 {
+  color: #FFD700;
+  font-weight: 900;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.rank-2 {
+  color: #C0C0C0;
+  font-weight: 900;
+  text-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
+}
+
+.rank-3 {
+  color: #CD7F32;
+  font-weight: 900;
+  text-shadow: 0 0 10px rgba(205, 127, 50, 0.5);
+}
+

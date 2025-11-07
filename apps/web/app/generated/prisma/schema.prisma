@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String   @id @default(uuid()) @db.Uuid
+  username      String   @unique
+  email         String   @unique
+  password      String // Hashed password
+  name          String? // Display name for games
+  lolId         String?  @map("lol_id") // League of Legends account
+  mainLane      String?  @map("main_lane") // TOP, JGL, MID, ADC, SUP
+  subLane       String?  @map("sub_lane")
+  score         Int      @default(0)
+  winLossStreak Int      @default(0) @map("win_loss_streak")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  // Relations
+  ownedPools      Pool[]           @relation("PoolOwner")
+  poolMemberships PoolMember[]
+  gameRecords     UserGameRecord[]
+
+  @@map("users")
+}
+
+model Pool {
+  poolId    BigInt   @id @default(autoincrement()) @map("pool_id")
+  ownerId   String   @map("owner_id") @db.Uuid
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  owner       User         @relation("PoolOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  memberships PoolMember[]
+  gameRecords GameRecord[]
+
+  @@map("pools")
+}
+
+model GameRecord {
+  gameId     BigInt   @id @default(autoincrement()) @map("game_id")
+  creatorId  String   @map("creator_id") @db.Uuid // User who created this record
+  poolId     BigInt   @map("pool_id")
+  team1Won   Boolean  @map("team1_won")
+  team1Kills Int      @default(0) @map("team1_kills")
+  team2Kills Int      @default(0) @map("team2_kills")
+  team1Gold  Int      @default(0) @map("team1_gold")
+  team2Gold  Int      @default(0) @map("team2_gold")
+  isApplied  Boolean  @default(false) @map("is_applied")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Relations
+  pool        Pool             @relation(fields: [poolId], references: [poolId], onDelete: Cascade)
+  userRecords UserGameRecord[]
+
+  @@map("game_records")
+}
+
+model UserGameRecord {
+  recordId         BigInt @id @default(autoincrement()) @map("record_id")
+  gameId           BigInt @map("game_id")
+  userId           String @map("user_id") @db.Uuid
+  teamNumber       Int    @map("team_number") // 1 or 2
+  assignedPosition String @map("assigned_position") // TOP, JGL, MID, ADC, SUP
+  kills            Int    @default(0)
+  deaths           Int    @default(0)
+  assists          Int    @default(0)
+  cs               Int    @default(0)
+
+  // Relations
+  gameRecord GameRecord @relation(fields: [gameId], references: [gameId], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_game_records")
+}
+
+// Join table for Pool <-> User many-to-many (members)
+model PoolMember {
+  poolId BigInt @map("pool_id")
+  userId String @map("user_id") @db.Uuid
+
+  // Relations
+  pool Pool @relation(fields: [poolId], references: [poolId], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([poolId, userId])
+  @@map("pool_members")
+}
