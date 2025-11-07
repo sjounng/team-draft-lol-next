@@ -56,8 +56,7 @@ export async function GET() {
           },
           invitations: {
             where: {
-              type: 'REQUEST',
-              status: 'PENDING'
+              type: 'REQUEST'
             },
             select: {
               invitationId: true
@@ -91,8 +90,7 @@ export async function GET() {
           },
           invitations: {
             where: {
-              type: 'REQUEST',
-              status: 'PENDING'
+              type: 'REQUEST'
             },
             select: {
               invitationId: true

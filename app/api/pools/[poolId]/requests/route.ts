@@ -34,8 +34,7 @@ export async function GET(
     const requests = await prisma.invitation.findMany({
       where: {
         poolId,
-        type: 'REQUEST',
-        status: 'PENDING'
+        type: 'REQUEST'
       },
       include: {
         sender: {

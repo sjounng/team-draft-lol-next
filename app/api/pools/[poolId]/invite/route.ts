@@ -61,17 +61,16 @@ export async function POST(
     // Check if there's already a pending invitation
     const existingInvitation = await prisma.invitation.findUnique({
       where: {
-        poolId_receiverId_type: {
+        poolId_senderId_type: {
           poolId: pool.poolId,
-          receiverId: invitedUserId,
+          senderId: userId,
           type: 'INVITATION'
-        },
-        status: 'PENDING'
+        }
       }
     })
 
     if (existingInvitation) {
-      return errorResponse('User already has a pending invitation', 400)
+      return errorResponse('Invitation already sent to this user', 400)
     }
 
     // Create invitation instead of directly adding to pool
@@ -80,8 +79,7 @@ export async function POST(
         poolId: pool.poolId,
         senderId: userId, // Owner sending invitation
         receiverId: invitedUserId, // User receiving invitation
-        type: 'INVITATION',
-        status: 'PENDING'
+        type: 'INVITATION'
       }
     })
 
