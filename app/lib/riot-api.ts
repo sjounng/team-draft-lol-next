@@ -91,7 +91,7 @@ export function calculateScoreFromRank(tier: string, rank: string, lp: number): 
 /**
  * Get Riot account by Riot ID (gameName#tagLine)
  */
-async function getRiotAccount(gameName: string, tagLine: string): Promise<RiotAccount | null> {
+export async function getRiotAccount(gameName: string, tagLine: string): Promise<RiotAccount | null> {
   try {
     const url = `${ASIA_API}/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`
     const res = await fetch(url, {
@@ -110,6 +110,20 @@ async function getRiotAccount(gameName: string, tagLine: string): Promise<RiotAc
     console.error('Error fetching Riot account:', error)
     return null
   }
+}
+
+/**
+ * Verify if a Riot account exists
+ * Returns true if account exists, false otherwise
+ * Throws error if API key is not configured
+ */
+export async function verifyRiotAccount(riotId: string, riotTag: string): Promise<boolean> {
+  if (!RIOT_API_KEY || RIOT_API_KEY === 'YOUR_RIOT_API_KEY_HERE') {
+    throw new Error('Riot API key is not configured')
+  }
+
+  const account = await getRiotAccount(riotId, riotTag)
+  return account !== null
 }
 
 /**
@@ -137,11 +151,11 @@ async function getSummonerByPUUID(puuid: string): Promise<Summoner | null> {
 }
 
 /**
- * Get league entries (rank info) by summoner ID
+ * Get league entries (rank info) by PUUID
  */
-async function getLeagueEntries(summonerId: string): Promise<LeagueEntry[]> {
+async function getLeagueEntriesByPUUID(puuid: string): Promise<LeagueEntry[]> {
   try {
-    const url = `${KR_API}/lol/league/v4/entries/by-summoner/${summonerId}`
+    const url = `${KR_API}/lol/league/v4/entries/by-puuid/${puuid}`
     const res = await fetch(url, {
       headers: {
         'X-Riot-Token': RIOT_API_KEY || '',
@@ -163,12 +177,12 @@ async function getLeagueEntries(summonerId: string): Promise<LeagueEntry[]> {
 /**
  * Get ranked score for a Riot ID
  * Returns the score based on Solo/Duo Ranked queue
- * Returns 0 if unranked or if there's an error
+ * Returns null if unable to fetch score (API error, unranked, etc.)
  */
-export async function getRankedScore(riotId: string, riotTag: string): Promise<number> {
+export async function getRankedScore(riotId: string, riotTag: string): Promise<number | null> {
   if (!RIOT_API_KEY || RIOT_API_KEY === 'YOUR_RIOT_API_KEY_HERE') {
     console.warn('Riot API key not configured')
-    return 0
+    return null
   }
 
   try {
@@ -176,28 +190,21 @@ export async function getRankedScore(riotId: string, riotTag: string): Promise<n
     const account = await getRiotAccount(riotId, riotTag)
     if (!account) {
       console.log(`Account not found for ${riotId}#${riotTag}`)
-      return 0
+      return null
     }
 
-    // Step 2: Get summoner by PUUID
-    const summoner = await getSummonerByPUUID(account.puuid)
-    if (!summoner) {
-      console.log(`Summoner not found for PUUID ${account.puuid}`)
-      return 0
-    }
-
-    // Step 3: Get league entries
-    const leagueEntries = await getLeagueEntries(summoner.id)
+    // Step 2: Get league entries by PUUID (no need for summoner API anymore)
+    const leagueEntries = await getLeagueEntriesByPUUID(account.puuid)
     if (leagueEntries.length === 0) {
       console.log(`No ranked data found for ${riotId}#${riotTag}`)
-      return 0
+      return null
     }
 
     // Find Solo/Duo queue entry
     const soloQueue = leagueEntries.find(entry => entry.queueType === 'RANKED_SOLO_5x5')
     if (!soloQueue) {
       console.log(`No Solo/Duo queue data found for ${riotId}#${riotTag}`)
-      return 0
+      return null
     }
 
     // Calculate score
@@ -207,6 +214,6 @@ export async function getRankedScore(riotId: string, riotTag: string): Promise<n
     return score
   } catch (error) {
     console.error('Error getting ranked score:', error)
-    return 0
+    return null
   }
 }
