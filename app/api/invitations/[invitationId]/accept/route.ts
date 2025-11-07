@@ -29,10 +29,6 @@ export async function PUT(
       return unauthorizedResponse('You can only accept invitations sent to you')
     }
 
-    if (invitation.status !== 'PENDING') {
-      return errorResponse('Invitation is no longer pending')
-    }
-
     // Determine which user should be added to the pool
     // For INVITATION: receiverId (the person who was invited)
     // For REQUEST: senderId (the person who requested to join)
@@ -49,25 +45,23 @@ export async function PUT(
     })
 
     if (existingMember) {
-      // Update invitation status but don't add to pool again
-      await prisma.invitation.update({
-        where: { invitationId },
-        data: { status: 'ACCEPTED' }
+      // Delete invitation and don't add to pool again
+      await prisma.invitation.delete({
+        where: { invitationId }
       })
       return errorResponse('User is already a member of this pool')
     }
 
-    // Accept invitation/request and add user to pool
+    // Accept invitation/request, add user to pool, and delete invitation
     await prisma.$transaction([
-      prisma.invitation.update({
-        where: { invitationId },
-        data: { status: 'ACCEPTED' }
-      }),
       prisma.poolMember.create({
         data: {
           poolId: invitation.poolId,
           userId: userToAdd
         }
+      }),
+      prisma.invitation.delete({
+        where: { invitationId }
       })
     ])
 

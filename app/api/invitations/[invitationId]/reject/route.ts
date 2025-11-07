@@ -29,14 +29,9 @@ export async function PUT(
       return unauthorizedResponse('You can only reject invitations sent to you')
     }
 
-    if (invitation.status !== 'PENDING') {
-      return errorResponse('Invitation is no longer pending')
-    }
-
-    // Reject invitation
-    await prisma.invitation.update({
-      where: { invitationId },
-      data: { status: 'REJECTED' }
+    // Delete invitation
+    await prisma.invitation.delete({
+      where: { invitationId }
     })
 
     return successResponse({ message: 'Invitation rejected' })

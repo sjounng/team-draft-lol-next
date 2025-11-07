@@ -14,8 +14,7 @@ export async function GET() {
     const invitations = await prisma.invitation.findMany({
       where: {
         receiverId: userId,
-        type: 'INVITATION', // Only show invitations (owner->user), not requests
-        status: 'PENDING'
+        type: 'INVITATION' // Only show invitations (owner->user), not requests
       },
       include: {
         pool: {
@@ -116,30 +115,20 @@ export async function POST(request: NextRequest) {
     // Check if invitation/request already exists
     const existingInvitation = await prisma.invitation.findUnique({
       where: {
-        poolId_receiverId_type: {
+        poolId_senderId_type: {
           poolId: BigInt(poolId),
-          receiverId: actualReceiverId,
+          senderId: actualSenderId,
           type
         }
       }
     })
 
     if (existingInvitation) {
-      if (existingInvitation.status === 'PENDING') {
-        return errorResponse(
-          type === 'INVITATION'
-            ? 'Invitation already sent to this user'
-            : 'Join request already sent'
-        )
-      }
-      // If rejected, update to pending again
-      if (existingInvitation.status === 'REJECTED') {
-        const updated = await prisma.invitation.update({
-          where: { invitationId: existingInvitation.invitationId },
-          data: { status: 'PENDING', senderId: actualSenderId }
-        })
-        return successResponse(updated, 200)
-      }
+      return errorResponse(
+        type === 'INVITATION'
+          ? 'Invitation already sent to this user'
+          : 'Join request already sent'
+      )
     }
 
     // Create new invitation/request

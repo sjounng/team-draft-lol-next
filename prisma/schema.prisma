@@ -122,7 +122,6 @@ model Invitation {
   senderId     String   @map("sender_id") @db.Uuid // User who sent the invitation/request
   receiverId   String   @map("receiver_id") @db.Uuid // User who received the invitation/request
   type         String   @default("INVITATION") // INVITATION (owner->user), REQUEST (user->owner)
-  status       String   @default("PENDING") // PENDING, ACCEPTED, REJECTED
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
@@ -131,7 +130,7 @@ model Invitation {
   sender   User @relation("InvitationSender", fields: [senderId], references: [id], onDelete: Cascade)
   receiver User @relation("InvitationReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
 
-  @@unique([poolId, receiverId, type]) // One invitation/request per pool per user per type
+  @@unique([poolId, senderId, type]) // One invitation/request per pool per sender per type
   @@map("invitations")
 }
 
