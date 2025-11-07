@@ -50,10 +50,10 @@ export async function POST(
       data: {
         status: 'DRAFT_COMPLETE',
         team1Won: null,
-        team1Kills: null,
-        team2Kills: null,
-        team1Gold: null,
-        team2Gold: null,
+        team1Kills: 0,
+        team2Kills: 0,
+        team1Gold: 0,
+        team2Gold: 0,
         gameDuration: null,
       },
     })
@@ -62,10 +62,10 @@ export async function POST(
     await prisma.userGameRecord.updateMany({
       where: { gameId: matchId },
       data: {
-        kills: null,
-        deaths: null,
-        assists: null,
-        cs: null,
+        kills: 0,
+        deaths: 0,
+        assists: 0,
+        cs: 0,
       },
     })
 

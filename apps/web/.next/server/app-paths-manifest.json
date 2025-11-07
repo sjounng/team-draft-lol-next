@@ -1,5 +1,0 @@
-{
-  "/pools/[poolId]/matches/page": "app/pools/[poolId]/matches/page.js",
-  "/page": "app/page.js",
-  "/pools/[poolId]/page": "app/pools/[poolId]/page.js"
-}

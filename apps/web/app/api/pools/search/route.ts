@@ -29,26 +29,26 @@ export async function GET(request: NextRequest) {
     }
 
     // Build search condition
-    let searchCondition
+    let searchCondition: any
     if (searchName && searchTag) {
       // Case: "MyPool#A1B2" - search for name AND tag
       searchCondition = {
         AND: [
-          { name: { contains: searchName, mode: 'insensitive' } },
-          { tag: { contains: searchTag, mode: 'insensitive' } }
+          { name: { contains: searchName, mode: 'insensitive' as const } },
+          { tag: { contains: searchTag, mode: 'insensitive' as const } }
         ]
       }
     } else if (searchTag) {
       // Case: "#A1B2" - search tag only
       searchCondition = {
-        tag: { contains: searchTag, mode: 'insensitive' }
+        tag: { contains: searchTag, mode: 'insensitive' as const }
       }
     } else {
       // Case: "MyPool" - search name OR tag
       searchCondition = {
         OR: [
-          { name: { contains: query, mode: 'insensitive' } },
-          { tag: { contains: query, mode: 'insensitive' } }
+          { name: { contains: query, mode: 'insensitive' as const } },
+          { tag: { contains: query, mode: 'insensitive' as const } }
         ]
       }
     }

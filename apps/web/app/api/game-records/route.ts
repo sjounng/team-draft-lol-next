@@ -109,6 +109,8 @@ export async function POST(request: NextRequest) {
       data: {
         creatorId: userId,
         poolId: BigInt(poolId),
+        team1Data: JSON.stringify({}),
+        team2Data: JSON.stringify({}),
         team1Won,
         team1Kills: team1Kills || 0,
         team2Kills: team2Kills || 0,
