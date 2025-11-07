@@ -17,7 +17,6 @@ importers:
       tsx:
         specifier: ^4.20.6
         version: 4.20.6
-    devDependencies:
       turbo:
         specifier: ^2.3.3
         version: 2.6.0
