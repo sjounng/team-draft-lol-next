@@ -82,8 +82,15 @@ export async function POST(
       return errorResponse('당신의 차례가 아닙니다.', 403)
     }
 
-    const bans = JSON.parse(session.bansData)
-    const picks = JSON.parse(session.picksData)
+    let bans, picks
+    try {
+      bans = JSON.parse(session.bansData)
+      picks = JSON.parse(session.picksData)
+    } catch (parseError) {
+      console.error('Error parsing ban/pick data:', parseError)
+      return errorResponse('밴/픽 데이터가 손상되었습니다.', 500)
+    }
+
     const currentStep = session.currentStep
 
     // Validate step is within bounds

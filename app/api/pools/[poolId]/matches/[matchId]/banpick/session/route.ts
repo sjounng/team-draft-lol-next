@@ -44,6 +44,17 @@ export async function GET(
     }
 
     // Transform data (including CANCELLED/COMPLETED status for client handling)
+    let bans, picks, team1Data, team2Data
+    try {
+      bans = JSON.parse(session.bansData)
+      picks = JSON.parse(session.picksData)
+      team1Data = JSON.parse(session.gameRecord.team1Data)
+      team2Data = JSON.parse(session.gameRecord.team2Data)
+    } catch (parseError) {
+      console.error('Error parsing session data:', parseError)
+      return errorResponse('세션 데이터가 손상되었습니다.', 500)
+    }
+
     const transformedSession = {
       sessionId: session.sessionId.toString(),
       gameId: session.gameId.toString(),
@@ -53,10 +64,10 @@ export async function GET(
       currentTurn: session.currentTurn,
       currentPhase: session.currentPhase,
       currentStep: session.currentStep,
-      bans: JSON.parse(session.bansData),
-      picks: JSON.parse(session.picksData),
-      team1Data: JSON.parse(session.gameRecord.team1Data),
-      team2Data: JSON.parse(session.gameRecord.team2Data),
+      bans,
+      picks,
+      team1Data,
+      team2Data,
       userRecords: session.gameRecord.userRecords,
       createdAt: session.createdAt.toISOString(),
       updatedAt: session.updatedAt.toISOString(),

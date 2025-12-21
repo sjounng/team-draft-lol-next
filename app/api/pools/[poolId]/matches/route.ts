@@ -65,8 +65,19 @@ export async function GET(
 
     // Transform data
     const transformedMatches = matches.map((match) => {
-      const team1Data = JSON.parse(match.team1Data)
-      const team2Data = JSON.parse(match.team2Data)
+      let team1Data, team2Data
+      try {
+        team1Data = JSON.parse(match.team1Data)
+        team2Data = JSON.parse(match.team2Data)
+      } catch (parseError) {
+        console.error('Error parsing team data for match:', match.gameId, parseError)
+        // Return minimal data if parsing fails
+        return {
+          gameId: match.gameId.toString(),
+          error: 'Invalid team data',
+          status: match.status,
+        }
+      }
 
       // Update team data with latest champion info from userRecords
       const team1Players = team1Data.players.map((player: any) => {
@@ -103,7 +114,13 @@ export async function GET(
           ...team2Data,
           players: team2Players,
         },
-        banPickData: match.banPickData ? JSON.parse(match.banPickData) : null,
+        banPickData: match.banPickData ? (() => {
+          try {
+            return JSON.parse(match.banPickData)
+          } catch {
+            return null
+          }
+        })() : null,
         team1Won: match.team1Won,
         team1Kills: match.team1Kills,
         team2Kills: match.team2Kills,

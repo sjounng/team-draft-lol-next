@@ -28,7 +28,7 @@ pnpm build
 
 # PM2로 애플리케이션 재시작
 echo "🔄 Restarting application with PM2..."
-pm2 restart team-draft-app || pm2 start npm --name "team-draft-app" -- start
+pm2 restart team-draft-app || pm2 start node --name "team-draft-app" -- .next/standalone/server.js
 
 # PM2 상태 확인
 echo "✅ Application status:"

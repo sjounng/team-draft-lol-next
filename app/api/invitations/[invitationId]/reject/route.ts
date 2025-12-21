@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { prisma } from '@/app/lib/prisma'
 import { getCurrentUserId } from '@/app/lib/auth'
 import { successResponse, errorResponse, unauthorizedResponse, notFoundResponse } from '@/app/lib/api-response'
+import { parseBigInt } from '@/app/lib/bigint-utils'
 
 // PUT /api/invitations/:id/reject - Reject invitation
 export async function PUT(
@@ -15,7 +16,7 @@ export async function PUT(
     }
 
     const { invitationId: invitationIdParam } = await params
-    const invitationId = BigInt(invitationIdParam)
+    const invitationId = parseBigInt(invitationIdParam, 'Invitation ID')
 
     const invitation = await prisma.invitation.findUnique({
       where: { invitationId }
@@ -37,6 +38,9 @@ export async function PUT(
     return successResponse({ message: 'Invitation rejected' })
   } catch (error) {
     console.error('Error rejecting invitation:', error)
+    if (error instanceof Error && error.message.includes('Invalid')) {
+      return errorResponse(error.message, 400)
+    }
     return errorResponse('Failed to reject invitation', 500)
   }
 }
