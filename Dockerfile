@@ -42,6 +42,9 @@ RUN pnpm run build
 FROM node:20-alpine AS runner
 RUN apk add --no-cache libc6-compat openssl
 
+# Install pnpm for prisma generate
+RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
+
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -55,8 +58,14 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
+
+# Install Prisma dependencies
+RUN pnpm add -D prisma && pnpm add @prisma/client
+
+# Fix ownership
+RUN chown -R nextjs:nodejs /app
 
 USER nextjs
 

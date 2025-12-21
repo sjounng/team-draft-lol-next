@@ -18,7 +18,8 @@ services:
       - "3000:3000"
     command: >
       sh -c "
-        npx prisma migrate deploy &&
+        pnpm prisma generate &&
+        pnpm prisma migrate deploy &&
         node server.js
       "
 
