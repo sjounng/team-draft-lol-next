@@ -17,14 +17,19 @@ git pull origin main
 echo "📦 Installing dependencies..."
 pnpm install --frozen-lockfile
 
-# Prisma 생성 및 마이그레이션
-echo "🔄 Running Prisma migrations..."
+# Prisma 생성 및 스키마 적용
+echo "🔄 Running Prisma schema push..."
 pnpm prisma generate
-pnpm prisma migrate deploy
+pnpm prisma db push --accept-data-loss
 
 # Next.js 빌드
 echo "🔨 Building Next.js application..."
 pnpm build
+
+# Standalone 빌드를 위한 정적 파일 복사
+echo "📋 Copying static files for standalone build..."
+cp -r public .next/standalone/ 2>/dev/null || true
+cp -r .next/static .next/standalone/.next/ 2>/dev/null || true
 
 # PM2로 애플리케이션 재시작
 echo "🔄 Restarting application with PM2..."
