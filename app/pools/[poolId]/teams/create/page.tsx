@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "../../../../contexts/AuthContext";
+import { useAuth, fetchWithAuth } from "../../../../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
@@ -39,7 +39,7 @@ export default function CreateTeamPage() {
 
   const fetchPool = async () => {
     try {
-      const res = await fetch(`/api/pools/${poolId}`);
+      const res = await fetchWithAuth(`/api/pools/${poolId}`);
       if (res.ok) {
         const data = await res.json();
         setPool(data.data);
@@ -86,7 +86,7 @@ export default function CreateTeamPage() {
 
     try {
       const userIds = selectedMembers.map((m) => m.id);
-      const res = await fetch("/api/teams/generate", {
+      const res = await fetchWithAuth("/api/teams/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userIds }),
@@ -124,7 +124,7 @@ export default function CreateTeamPage() {
         (generatedTeams.currentCombination || 1) %
         (generatedTeams.totalCombinations || 10);
 
-      const res = await fetch("/api/teams/reroll", {
+      const res = await fetchWithAuth("/api/teams/reroll", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

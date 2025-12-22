@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { fetchWithAuth } from "@/app/contexts/AuthContext";
 import { Match, Player, PlayerStats } from "@/app/components/result/types";
 import WinnerSelection from "@/app/components/result/WinnerSelection";
 import GameDurationInput from "@/app/components/result/GameDurationInput";
@@ -34,7 +35,7 @@ export default function ResultPage() {
 
   const fetchMatch = async () => {
     try {
-      const res = await fetch(`/api/pools/${poolId}/matches/${matchId}`);
+      const res = await fetchWithAuth(`/api/pools/${poolId}/matches/${matchId}`);
       if (res.ok) {
         const data = await res.json();
         const matchData = data.data;
@@ -174,7 +175,7 @@ export default function ResultPage() {
 
     setSubmitting(true);
     try {
-      const res = await fetch(`/api/pools/${poolId}/matches/${matchId}/result`, {
+      const res = await fetchWithAuth(`/api/pools/${poolId}/matches/${matchId}/result`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { fetchWithAuth } from "../contexts/AuthContext";
 
 interface ChampionStat {
   statId: string;
@@ -51,7 +52,7 @@ export default function TiersPage() {
     setError("");
 
     try {
-      const res = await fetch(`/api/tiers?position=${pos}`);
+      const res = await fetchWithAuth(`/api/tiers?position=${pos}`);
       if (res.ok) {
         const data = await res.json();
         setChampions(data.data.champions);

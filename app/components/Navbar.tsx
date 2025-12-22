@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth, fetchWithAuth } from '../contexts/AuthContext'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -24,7 +24,7 @@ export default function Navbar() {
 
   const fetchInvitationCount = async () => {
     try {
-      const res = await fetch('/api/invitations')
+      const res = await fetchWithAuth('/api/invitations')
       if (res.ok) {
         const data = await res.json()
         setInvitationCount(data.data.length)

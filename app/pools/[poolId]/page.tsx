@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth, fetchWithAuth } from "../../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
@@ -69,9 +69,9 @@ export default function PoolDetailPage() {
     try {
       // Fetch all data in parallel
       const [poolRes, requestsRes, matchCountRes] = await Promise.all([
-        fetch(`/api/pools/${poolId}`),
-        fetch(`/api/pools/${poolId}/requests`),
-        fetch(`/api/pools/${poolId}/matches/count`)
+        fetchWithAuth(`/api/pools/${poolId}`),
+        fetchWithAuth(`/api/pools/${poolId}/requests`),
+        fetchWithAuth(`/api/pools/${poolId}/matches/count`)
       ]);
 
       // Handle pool data
@@ -109,7 +109,7 @@ export default function PoolDetailPage() {
     if (!confirm("정말 이 Pool에서 나가시겠습니까?")) return;
 
     try {
-      const res = await fetch(`/api/pools/${poolId}/members/${user?.id}`, {
+      const res = await fetchWithAuth(`/api/pools/${poolId}/members/${user?.id}`, {
         method: "DELETE",
       });
 

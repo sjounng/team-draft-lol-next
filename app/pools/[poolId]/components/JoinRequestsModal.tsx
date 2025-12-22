@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { fetchWithAuth } from "../../../contexts/AuthContext";
 
 interface JoinRequest {
   invitationId: string;
@@ -37,7 +38,7 @@ export default function JoinRequestsModal({
 
   const fetchRequests = async () => {
     try {
-      const res = await fetch(`/api/pools/${poolId}/requests`);
+      const res = await fetchWithAuth(`/api/pools/${poolId}/requests`);
       if (res.ok) {
         const data = await res.json();
         setRequests(data.data);
@@ -53,7 +54,7 @@ export default function JoinRequestsModal({
 
   const handleAccept = async (invitationId: string) => {
     try {
-      const res = await fetch(`/api/invitations/${invitationId}/accept`, {
+      const res = await fetchWithAuth(`/api/invitations/${invitationId}/accept`, {
         method: "PUT",
       });
 
@@ -73,7 +74,7 @@ export default function JoinRequestsModal({
 
   const handleReject = async (invitationId: string) => {
     try {
-      const res = await fetch(`/api/invitations/${invitationId}/reject`, {
+      const res = await fetchWithAuth(`/api/invitations/${invitationId}/reject`, {
         method: "PUT",
       });
 

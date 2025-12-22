@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { fetchWithAuth } from "../../../../../contexts/AuthContext";
 import { calculateScore } from "@/app/lib/score-calculator";
 
 interface Player {
@@ -90,7 +91,7 @@ export default function ApprovePage() {
   const checkOwnerAndFetchMatch = async () => {
     try {
       // Check if user is pool owner
-      const poolRes = await fetch(`/api/pools/${poolId}`);
+      const poolRes = await fetchWithAuth(`/api/pools/${poolId}`);
       if (!poolRes.ok) {
         alert("Pool 정보를 불러오는데 실패했습니다.");
         router.push(`/pools/${poolId}/matches`);
@@ -98,7 +99,7 @@ export default function ApprovePage() {
       }
 
       const poolData = await poolRes.json();
-      const userRes = await fetch("/api/auth/me");
+      const userRes = await fetchWithAuth("/api/auth/me");
       if (userRes.ok) {
         const userData = await userRes.json();
         if (poolData.data.ownerId !== userData.data.id) {
@@ -110,7 +111,7 @@ export default function ApprovePage() {
       }
 
       // Fetch match
-      const matchRes = await fetch(`/api/pools/${poolId}/matches/${matchId}`);
+      const matchRes = await fetchWithAuth(`/api/pools/${poolId}/matches/${matchId}`);
       if (matchRes.ok) {
         const matchData = await matchRes.json();
         const match = matchData.data;
@@ -201,7 +202,7 @@ export default function ApprovePage() {
 
     setProcessing(true);
     try {
-      const res = await fetch(`/api/pools/${poolId}/matches/${matchId}/approve`, {
+      const res = await fetchWithAuth(`/api/pools/${poolId}/matches/${matchId}/approve`, {
         method: "POST",
       });
 
@@ -227,7 +228,7 @@ export default function ApprovePage() {
 
     setProcessing(true);
     try {
-      const res = await fetch(`/api/pools/${poolId}/matches/${matchId}/reject`, {
+      const res = await fetchWithAuth(`/api/pools/${poolId}/matches/${matchId}/reject`, {
         method: "POST",
       });
 

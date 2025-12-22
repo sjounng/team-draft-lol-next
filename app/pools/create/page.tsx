@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
-import { useAuth } from '../../contexts/AuthContext'
+import { useAuth, fetchWithAuth } from '../../contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useEffect } from 'react'
@@ -31,7 +31,7 @@ export default function CreatePoolPage() {
     setCreating(true)
 
     try {
-      const res = await fetch('/api/pools', {
+      const res = await fetchWithAuth('/api/pools', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: name.trim() })

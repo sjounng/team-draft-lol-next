@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { fetchWithAuth } from "../../../contexts/AuthContext";
 
 interface InviteMemberModalProps {
   poolId: string;
@@ -42,7 +43,7 @@ export default function InviteMemberModal({
 
   const handleInvite = async (userId: string) => {
     try {
-      const res = await fetch(`/api/pools/${poolId}/invite`, {
+      const res = await fetchWithAuth(`/api/pools/${poolId}/invite`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId }),

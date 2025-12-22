@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { fetchWithAuth } from "../../../../../contexts/AuthContext";
 import { Champion, SessionData } from "@/app/components/banpick/types";
 import CurrentTurnIndicator from "@/app/components/banpick/CurrentTurnIndicator";
 import TeamBanPickPanel from "@/app/components/banpick/TeamBanPickPanel";
@@ -87,7 +88,7 @@ export default function BanPickPage() {
 
   const fetchUser = async () => {
     try {
-      const res = await fetch("/api/auth/me");
+      const res = await fetchWithAuth("/api/auth/me");
       if (res.ok) {
         const data = await res.json();
         setUserId(data.data.id);
@@ -105,7 +106,7 @@ export default function BanPickPage() {
     }
 
     try {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `/api/pools/${poolId}/matches/${matchId}/banpick/session`
       );
 
@@ -138,7 +139,7 @@ export default function BanPickPage() {
           if (hadSessionRef.current) {
             // Check if draft was completed
             try {
-              const gameRes = await fetch(`/api/pools/${poolId}/matches/${matchId}`);
+              const gameRes = await fetchWithAuth(`/api/pools/${poolId}/matches/${matchId}`);
               if (gameRes.ok) {
                 const gameData = await gameRes.json();
                 if (gameData.data?.status === "DRAFT_COMPLETE") {
@@ -159,7 +160,7 @@ export default function BanPickPage() {
           } else {
             // Initial load and no session - check if it was completed
             try {
-              const gameRes = await fetch(`/api/pools/${poolId}/matches/${matchId}`);
+              const gameRes = await fetchWithAuth(`/api/pools/${poolId}/matches/${matchId}`);
               if (gameRes.ok) {
                 const gameData = await gameRes.json();
                 if (gameData.data?.status === "DRAFT_COMPLETE") {
@@ -193,7 +194,7 @@ export default function BanPickPage() {
 
   const fetchChampions = async () => {
     try {
-      const res = await fetch("/api/champions");
+      const res = await fetchWithAuth("/api/champions");
       if (res.ok) {
         const data = await res.json();
         setChampions(data.data.champions);
@@ -209,7 +210,7 @@ export default function BanPickPage() {
 
     try {
       console.log("[BanPick] Leaving session");
-      await fetch(
+      await fetchWithAuth(
         `/api/pools/${poolId}/matches/${matchId}/banpick/session`,
         {
           method: "DELETE",
@@ -233,7 +234,7 @@ export default function BanPickPage() {
 
     setActionLoading(true);
     try {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `/api/pools/${poolId}/matches/${matchId}/banpick/action`,
         {
           method: "POST",

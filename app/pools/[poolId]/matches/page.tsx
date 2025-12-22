@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { fetchWithAuth } from "../../../contexts/AuthContext";
 import BanPickWaitingModal from "./components/BanPickWaitingModal";
 import ChampionSwapModal from "./components/ChampionSwapModal";
 import PlayerRow from "./components/PlayerRow";
@@ -48,14 +49,14 @@ export default function MatchesPage() {
   const fetchUserAndPool = async () => {
     try {
       // Fetch current user
-      const userRes = await fetch("/api/auth/me");
+      const userRes = await fetchWithAuth("/api/auth/me");
       if (userRes.ok) {
         const userData = await userRes.json();
         setUserId(userData.data.id);
       }
 
       // Fetch pool info
-      const poolRes = await fetch(`/api/pools/${poolId}`);
+      const poolRes = await fetchWithAuth(`/api/pools/${poolId}`);
       if (poolRes.ok) {
         const poolData = await poolRes.json();
         setPool(poolData.data);
@@ -73,7 +74,7 @@ export default function MatchesPage() {
           ? `/api/pools/${poolId}/matches`
           : `/api/pools/${poolId}/matches?status=${statusFilter}`;
 
-      const res = await fetch(url);
+      const res = await fetchWithAuth(url);
       if (res.ok) {
         const data = await res.json();
         setMatches(data.data);
@@ -95,7 +96,7 @@ export default function MatchesPage() {
     }
 
     try {
-      const res = await fetch(`/api/pools/${poolId}/matches/${matchId}/reset-draft`, {
+      const res = await fetchWithAuth(`/api/pools/${poolId}/matches/${matchId}/reset-draft`, {
         method: "POST",
       });
 
@@ -120,7 +121,7 @@ export default function MatchesPage() {
     }
 
     try {
-      const res = await fetch(`/api/pools/${poolId}/matches/${matchId}`, {
+      const res = await fetchWithAuth(`/api/pools/${poolId}/matches/${matchId}`, {
         method: "DELETE",
       });
 

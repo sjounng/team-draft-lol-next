@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { fetchWithAuth } from "../../../contexts/AuthContext";
 import { Member, TeamPlayer, TeamGenerationResult } from "./types";
 import TeamCard from "./TeamCard";
 
@@ -186,7 +187,7 @@ export default function TeamResultView({
         ? { players: editableTeam2, totalScore: calculateTeamScore(editableTeam2) }
         : teams.team2;
 
-      const res = await fetch(`/api/pools/${poolId}/matches`, {
+      const res = await fetchWithAuth(`/api/pools/${poolId}/matches`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { fetchWithAuth } from "../contexts/AuthContext";
 
 interface Player {
   userId: string;
@@ -68,7 +69,7 @@ export default function RecordsPage() {
     setError("");
 
     try {
-      const res = await fetch(`/api/records?page=${page}`);
+      const res = await fetchWithAuth(`/api/records?page=${page}`);
       if (res.ok) {
         const data = await res.json();
         setRecords(data.data.records);
