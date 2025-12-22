@@ -1,6 +1,6 @@
 'use client'
 
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth, fetchWithAuth } from '../contexts/AuthContext'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -49,7 +49,7 @@ export default function InvitationsPage() {
 
   const fetchInvitations = async () => {
     try {
-      const res = await fetch('/api/invitations')
+      const res = await fetchWithAuth('/api/invitations')
       if (res.ok) {
         const data = await res.json()
         setInvitations(data.data)
@@ -64,7 +64,7 @@ export default function InvitationsPage() {
   const handleAccept = async (invitationId: string) => {
     setProcessingId(invitationId)
     try {
-      const res = await fetch(`/api/invitations/${invitationId}/accept`, {
+      const res = await fetchWithAuth(`/api/invitations/${invitationId}/accept`, {
         method: 'PUT'
       })
 
@@ -86,7 +86,7 @@ export default function InvitationsPage() {
   const handleReject = async (invitationId: string) => {
     setProcessingId(invitationId)
     try {
-      const res = await fetch(`/api/invitations/${invitationId}/reject`, {
+      const res = await fetchWithAuth(`/api/invitations/${invitationId}/reject`, {
         method: 'PUT'
       })
 

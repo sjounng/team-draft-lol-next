@@ -25,6 +25,67 @@ interface AuthContextType {
   refreshUser: () => Promise<void>
 }
 
+// Helper function to make authenticated API calls
+export async function fetchWithAuth(url: string, options: RequestInit = {}) {
+  const token = localStorage.getItem('accessToken')
+
+  const headers: HeadersInit = {
+    ...options.headers,
+  }
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`
+  }
+
+  let response = await fetch(url, {
+    ...options,
+    headers,
+  })
+
+  // If token expired, try to refresh
+  if (response.status === 401) {
+    const refreshed = await refreshAccessToken()
+    if (refreshed) {
+      const newToken = localStorage.getItem('accessToken')
+      if (newToken) {
+        headers['Authorization'] = `Bearer ${newToken}`
+        response = await fetch(url, {
+          ...options,
+          headers,
+        })
+      }
+    } else {
+      // Refresh failed, redirect to login
+      localStorage.removeItem('accessToken')
+      window.location.href = '/login'
+    }
+  }
+
+  return response
+}
+
+// Helper function to refresh access token
+async function refreshAccessToken(): Promise<boolean> {
+  try {
+    const res = await fetch('/api/auth/refresh', {
+      method: 'POST',
+      credentials: 'include', // Include cookies
+    })
+
+    if (res.ok) {
+      const data = await res.json()
+      if (data.data.accessToken) {
+        localStorage.setItem('accessToken', data.data.accessToken)
+        return true
+      }
+    }
+    return false
+  } catch (error) {
+    console.error('Error refreshing token:', error)
+    return false
+  }
+}
+
 interface RegisterData {
   username: string
   email: string
@@ -50,16 +111,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUser = async () => {
     try {
-      const res = await fetch('/api/auth/me')
+      const token = localStorage.getItem('accessToken')
+
+      const res = await fetch('/api/auth/me', {
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      })
+
       if (res.ok) {
         const data = await res.json()
         setUser(data.data)
       } else {
         setUser(null)
+        // Clear invalid token
+        localStorage.removeItem('accessToken')
       }
     } catch (error) {
       console.error('Error fetching user:', error)
       setUser(null)
+      localStorage.removeItem('accessToken')
     } finally {
       setLoading(false)
     }
@@ -78,6 +147,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     const data = await res.json()
+
+    // Store access token in localStorage
+    if (data.data.accessToken) {
+      localStorage.setItem('accessToken', data.data.accessToken)
+    }
+
     setUser(data.data.user)
     router.push('/dashboard')
   }
@@ -95,12 +170,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     const result = await res.json()
+
+    // Store access token in localStorage
+    if (result.data.accessToken) {
+      localStorage.setItem('accessToken', result.data.accessToken)
+    }
+
     setUser(result.data.user)
     router.push('/dashboard')
   }
 
   const logout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' })
+    // Get access token for blacklisting
+    const token = localStorage.getItem('accessToken')
+
+    await fetch('/api/auth/logout', {
+      method: 'POST',
+      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+    })
+
+    // Clear access token from localStorage
+    localStorage.removeItem('accessToken')
+
     setUser(null)
     router.push('/login')
   }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth, fetchWithAuth } from "../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -54,7 +54,7 @@ export default function DashboardPage() {
 
   const fetchPools = async () => {
     try {
-      const res = await fetch("/api/pools");
+      const res = await fetchWithAuth("/api/pools");
       if (res.ok) {
         const data = await res.json();
         setPools(data.data);
@@ -68,7 +68,7 @@ export default function DashboardPage() {
 
   const fetchTopChampions = async () => {
     try {
-      const res = await fetch("/api/users/me/champions?limit=3");
+      const res = await fetchWithAuth("/api/users/me/champions?limit=3");
       if (res.ok) {
         const data = await res.json();
         setTopChampions(data.data);
@@ -475,7 +475,7 @@ function JoinPoolModal({
     setError("");
 
     try {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `/api/pools/search?q=${encodeURIComponent(searchQuery)}`
       );
       if (res.ok) {
@@ -493,7 +493,7 @@ function JoinPoolModal({
 
   const handleSendRequest = async (poolId: string, ownerId: string) => {
     try {
-      const res = await fetch("/api/invitations", {
+      const res = await fetchWithAuth("/api/invitations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

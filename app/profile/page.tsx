@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth, fetchWithAuth } from "../contexts/AuthContext";
 import { useEffect, useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -74,7 +74,7 @@ export default function ProfilePage() {
         riotTag = parts[1]?.trim() || null;
       }
 
-      const res = await fetch("/api/profile", {
+      const res = await fetchWithAuth("/api/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
