@@ -29,8 +29,8 @@ interface AuthContextType {
 export async function fetchWithAuth(url: string, options: RequestInit = {}) {
   const token = localStorage.getItem('accessToken')
 
-  const headers: HeadersInit = {
-    ...options.headers,
+  const headers: Record<string, string> = {
+    ...(options.headers as Record<string, string>),
   }
 
   if (token) {
@@ -113,9 +113,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const token = localStorage.getItem('accessToken')
 
-      const res = await fetch('/api/auth/me', {
-        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
-      })
+      const headers: Record<string, string> = {}
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`
+      }
+
+      const res = await fetch('/api/auth/me', { headers })
 
       if (res.ok) {
         const data = await res.json()
@@ -184,9 +187,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Get access token for blacklisting
     const token = localStorage.getItem('accessToken')
 
+    const headers: Record<string, string> = {}
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+
     await fetch('/api/auth/logout', {
       method: 'POST',
-      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      headers
     })
 
     // Clear access token from localStorage
