@@ -1,7 +1,12 @@
 import { NextRequest } from "next/server";
 import { hash } from "bcryptjs";
 import { prisma } from "@/app/lib/prisma";
-import { signToken } from "@/app/lib/jwt";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  storeRefreshToken,
+  verifyRefreshToken
+} from "@/app/lib/token";
 import { successResponse, errorResponse } from "@/app/lib/api-response";
 import { cookies } from "next/headers";
 import { getRankedScore, verifyRiotAccount } from "@/app/lib/riot-api";
@@ -85,20 +90,32 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Generate JWT token
-    const token = signToken({
+    // Generate tokens
+    const tokenPayload = {
       userId: user.id,
-      email: user.email,
-      username: user.username,
-    });
+      email: user.email
+    };
 
-    // Set cookie
+    const accessToken = generateAccessToken(tokenPayload);
+    const refreshToken = generateRefreshToken(tokenPayload);
+
+    // Extract tokenId from refresh token
+    const refreshPayload = verifyRefreshToken(refreshToken);
+    if (!refreshPayload) {
+      return errorResponse('Failed to generate refresh token', 500);
+    }
+
+    // Store refresh token in Redis
+    await storeRefreshToken(user.id, refreshPayload.tokenId, refreshToken);
+
+    // Set refresh token as HttpOnly cookie
     const cookieStore = await cookies();
-    cookieStore.set("token", token, {
+    cookieStore.set("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "strict",
       maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: '/'
     });
 
     return successResponse(
@@ -115,7 +132,7 @@ export async function POST(request: NextRequest) {
           score: user.score,
           winLossStreak: user.winLossStreak,
         },
-        token,
+        accessToken, // Return access token to be stored in memory/localStorage by client
       },
       201
     );
