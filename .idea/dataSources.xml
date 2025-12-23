@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="team_draft_lol@team-draft-lol-db.cfwqmo4gsnie.ap-northeast-2.rds.amazonaws.com" uuid="9dd1facb-4d2d-4940-8a02-b65a291229ec">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://team-draft-lol-db.cfwqmo4gsnie.ap-northeast-2.rds.amazonaws.com:5432/team_draft_lol</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+  </component>
+</project>

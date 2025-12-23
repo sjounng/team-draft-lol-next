@@ -12,13 +12,10 @@ export default function Navbar() {
 
   const isActive = (path: string) => pathname === path
 
-  // Fetch invitation count
+  // Fetch invitation count (once on mount)
   useEffect(() => {
     if (user) {
       fetchInvitationCount()
-      // Poll every 30 seconds
-      const interval = setInterval(fetchInvitationCount, 30000)
-      return () => clearInterval(interval)
     }
   }, [user])
 
