@@ -1,10 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'standalone', // Docker 배포를 위한 standalone 빌드
-  eslint: {
-    ignoreDuringBuilds: true, // 빌드 시 ESLint 무시
-  },
+  output: 'standalone', // standalone 빌드
   typescript: {
     ignoreBuildErrors: false, // TypeScript 에러는 체크
   },
