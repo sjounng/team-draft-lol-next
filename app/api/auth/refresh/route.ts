@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     // Set new refresh token as HttpOnly cookie
     cookieStore.set('refreshToken', newRefreshToken, {
       httpOnly: true,
-      secure: false, // Set to true when using HTTPS
+      secure: true, // HTTPS enabled
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7, // 7 days
       path: '/'

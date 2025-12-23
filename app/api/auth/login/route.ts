@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     const cookieStore = await cookies()
     cookieStore.set('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: false, // Set to true when using HTTPS
+      secure: true, // HTTPS enabled
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7, // 7 days
       path: '/'
