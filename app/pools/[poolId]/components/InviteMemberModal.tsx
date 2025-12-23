@@ -25,7 +25,7 @@ export default function InviteMemberModal({
     setError("");
 
     try {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `/api/users/search?q=${encodeURIComponent(searchQuery)}`
       );
       if (res.ok) {

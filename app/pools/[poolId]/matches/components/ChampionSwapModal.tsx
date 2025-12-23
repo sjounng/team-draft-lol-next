@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Player } from "../types";
+import { fetchWithAuth } from "../../../../contexts/AuthContext";
 
 interface ChampionSwapModalProps {
   matchId: string;
@@ -45,7 +46,7 @@ export default function ChampionSwapModal({
     setError("");
 
     try {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `/api/pools/${poolId}/matches/${matchId}/swap-champions`,
         {
           method: "POST",

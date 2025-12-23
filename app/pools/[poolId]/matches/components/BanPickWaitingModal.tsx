@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { fetchWithAuth } from "../../../../contexts/AuthContext";
 
 interface BanPickWaitingModalProps {
   poolId: string;
@@ -92,7 +93,7 @@ export default function BanPickWaitingModal({
     try {
       setIsJoining(true);
       setLoading(true);
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `/api/pools/${poolId}/matches/${matchId}/banpick/session`,
         {
           method: "POST",
@@ -118,7 +119,7 @@ export default function BanPickWaitingModal({
 
   const fetchSession = async () => {
     try {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `/api/pools/${poolId}/matches/${matchId}/banpick/session`
       );
 
@@ -135,7 +136,7 @@ export default function BanPickWaitingModal({
 
   const leaveSession = async () => {
     try {
-      await fetch(
+      await fetchWithAuth(
         `/api/pools/${poolId}/matches/${matchId}/banpick/session`,
         {
           method: "DELETE",
