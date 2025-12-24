@@ -18,7 +18,7 @@ export default function WinnerSelection({
           className={`flex-1 py-4 rounded-lg font-semibold transition-all ${
             team1Won === true
               ? "bg-[var(--accent-purple)] text-white"
-              : "bg-[var(--card-bg)] border-2 border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--accent-purple)]"
+              : "bg-[var(--surface)] border border-[var(--border)]/30 text-[var(--text-primary)] hover:border-[var(--accent-purple)]/50"
           }`}
         >
           Team 1 승리
@@ -28,7 +28,7 @@ export default function WinnerSelection({
           className={`flex-1 py-4 rounded-lg font-semibold transition-all ${
             team1Won === false
               ? "bg-[var(--accent-blue)] text-white"
-              : "bg-[var(--card-bg)] border-2 border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--accent-blue)]"
+              : "bg-[var(--surface)] border border-[var(--border)]/30 text-[var(--text-primary)] hover:border-[var(--accent-blue)]/50"
           }`}
         >
           Team 2 승리

@@ -299,7 +299,7 @@ export default function MatchesPage() {
             className={`px-4 py-2 rounded-lg transition-colors ${
               statusFilter === "ALL"
                 ? "bg-[var(--primary)] text-white"
-                : "bg-[var(--card-bg)] text-[var(--text-muted)] hover:bg-[var(--hover-bg)]"
+                : "bg-[var(--surface)] text-[var(--text-muted)] hover:bg-[var(--surface-hover)]"
             }`}
           >
             전체
@@ -311,7 +311,7 @@ export default function MatchesPage() {
               className={`px-4 py-2 rounded-lg transition-colors ${
                 statusFilter === status
                   ? "bg-[var(--primary)] text-white"
-                  : "bg-[var(--card-bg)] text-[var(--text-muted)] hover:bg-[var(--hover-bg)]"
+                  : "bg-[var(--surface)] text-[var(--text-muted)] hover:bg-[var(--surface-hover)]"
               }`}
             >
               {STATUS_LABELS[status]}
@@ -365,7 +365,7 @@ export default function MatchesPage() {
             return (
               <div
                 key={match.gameId}
-                className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] hover:border-[var(--primary)] transition-colors"
+                className="bg-[var(--surface)] rounded-lg border border-[var(--border)]/30 shadow-sm hover:border-[var(--accent-purple)]/30 hover:shadow-md transition-all duration-200"
               >
                 {/* Consistent Header Bar */}
                 <div
@@ -490,7 +490,7 @@ export default function MatchesPage() {
 
                     {/* Match Stats (if result entered) */}
                     {match.team1Won !== null && (
-                      <div className="mt-4 pt-4 border-t border-[var(--border-color)]">
+                      <div className="mt-4 pt-4 border-t border-[var(--border)]">
                         <div className="grid grid-cols-2 gap-4 text-center">
                           <div>
                             <p className="text-sm text-[var(--text-muted)]">킬</p>

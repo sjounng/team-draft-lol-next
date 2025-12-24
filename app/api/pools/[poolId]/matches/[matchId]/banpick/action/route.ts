@@ -3,11 +3,11 @@ import { prisma } from '@/app/lib/prisma'
 import { getCurrentUserId } from '@/app/lib/auth'
 import { successResponse, errorResponse, unauthorizedResponse } from '@/app/lib/api-response'
 
-// Ban/Pick order configuration (Official League of Legends Draft Order)
+// Ban/Pick order configuration (Custom Draft Order)
 // Global steps 0-19 representing entire ban-pick flow:
 // Steps 0-5: First ban phase (1 2 1 2 1 2) - Alternating
 // Steps 6-11: First pick phase (1 2 2 1 1 2)
-// Steps 12-15: Second ban phase (2 1 2 1)
+// Steps 12-15: Second ban phase (1 2 1 2) - Starts with Blue team
 // Steps 16-19: Second pick phase (2 1 1 2)
 const DRAFT_ORDER = [
   // First ban phase (6 bans) - Alternating turns
@@ -16,8 +16,8 @@ const DRAFT_ORDER = [
   // First pick phase (6 picks)
   { team: 1, type: 'PICK' }, { team: 2, type: 'PICK' }, { team: 2, type: 'PICK' },
   { team: 1, type: 'PICK' }, { team: 1, type: 'PICK' }, { team: 2, type: 'PICK' },
-  // Second ban phase (4 bans)
-  { team: 2, type: 'BAN' }, { team: 1, type: 'BAN' }, { team: 2, type: 'BAN' }, { team: 1, type: 'BAN' },
+  // Second ban phase (4 bans) - Starts with Blue team
+  { team: 1, type: 'BAN' }, { team: 2, type: 'BAN' }, { team: 1, type: 'BAN' }, { team: 2, type: 'BAN' },
   // Second pick phase (4 picks)
   { team: 2, type: 'PICK' }, { team: 1, type: 'PICK' }, { team: 1, type: 'PICK' }, { team: 2, type: 'PICK' }
 ]

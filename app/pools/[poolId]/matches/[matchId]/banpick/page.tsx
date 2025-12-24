@@ -391,9 +391,9 @@ export default function BanPickPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="h-screen flex flex-col max-w-[1920px] mx-auto px-6 py-4">
       {/* Header */}
-      <div className="mb-6">
+      <div className="mb-4 flex-shrink-0">
         <div className="flex items-center justify-between mb-2">
           <button
             onClick={handleBackToMatches}
@@ -414,13 +414,15 @@ export default function BanPickPage() {
       </div>
 
       {/* Current Turn Indicator */}
-      <CurrentTurnIndicator
-        currentAction={getCurrentAction()}
-        isMyTurn={isMyTurn()}
-      />
+      <div className="flex-shrink-0">
+        <CurrentTurnIndicator
+          currentAction={getCurrentAction()}
+          isMyTurn={isMyTurn()}
+        />
+      </div>
 
       {/* Ban-Pick Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[2fr_1.5fr_2fr] gap-4 min-h-0">
         {/* Team 1 Bans & Picks */}
         <TeamBanPickPanel
           teamNumber={1}

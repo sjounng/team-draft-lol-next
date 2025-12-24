@@ -56,12 +56,12 @@ export default function ChampionGrid({
                 key={champion.id}
                 onClick={() => onChampionSelect(champion)}
                 disabled={!isMyTurn || disabled || actionLoading}
-                className={`relative aspect-square rounded border-2 overflow-hidden transition-all ${
+                className={`relative aspect-square rounded border overflow-hidden transition-all shadow-sm ${
                   disabled
-                    ? "opacity-30 cursor-not-allowed border-[var(--border-color)]"
+                    ? "opacity-30 cursor-not-allowed border-[var(--border)]/30"
                     : isMyTurn && !actionLoading
-                    ? "border-[var(--border-color)] hover:border-[var(--primary)] hover:scale-105 cursor-pointer"
-                    : "border-[var(--border-color)] opacity-50 cursor-not-allowed"
+                    ? "border-[var(--border)]/30 hover:border-[var(--accent-purple)]/50 hover:shadow-md hover:scale-105 cursor-pointer"
+                    : "border-[var(--border)]/30 opacity-50 cursor-not-allowed"
                 }`}
                 title={champion.name}
               >
@@ -96,7 +96,7 @@ export default function ChampionGrid({
       {/* Loading Indicator */}
       {actionLoading && (
         <div className="mt-4 text-center">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[var(--primary)] mx-auto"></div>
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[var(--accent-purple)] mx-auto"></div>
           <p className="text-sm text-[var(--text-muted)] mt-2">
             처리 중...
           </p>

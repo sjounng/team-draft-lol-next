@@ -126,10 +126,10 @@ export default function ChampionSwapModal({
               onDragStart={() => handleDragStart(player.userId)}
               onDragOver={handleDragOver}
               onDrop={() => handleDrop(player.userId)}
-              className={`w-full p-4 rounded-lg border-2 transition-all cursor-move ${
+              className={`w-full p-4 rounded-lg border transition-all cursor-move ${
                 draggedPlayer === player.userId
-                  ? "opacity-50 border-[var(--primary)]"
-                  : "border-[var(--border)] bg-[var(--surface)] hover:border-[var(--primary)]/50 hover:scale-[1.02]"
+                  ? "opacity-50 border-[var(--accent-purple)]/50"
+                  : "border-[var(--border)]/30 bg-[var(--surface)] hover:border-[var(--accent-purple)]/50 hover:scale-[1.02]"
               }`}
             >
               <div className="flex items-center gap-4">

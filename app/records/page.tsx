@@ -302,7 +302,7 @@ export default function RecordsPage() {
 
               {/* Score Change */}
               {record.isApplied && record.adjustedScore !== null && (
-                <div className="pt-4 border-t border-[var(--border-color)]">
+                <div className="pt-4 border-t border-[var(--border)]">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-[var(--text-muted)]">
                       점수 변화

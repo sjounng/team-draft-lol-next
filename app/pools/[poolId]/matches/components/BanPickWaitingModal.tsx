@@ -159,7 +159,7 @@ export default function BanPickWaitingModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] max-w-2xl w-full p-6">
+      <div className="bg-[var(--surface)] rounded-lg border border-[var(--border)]/30 max-w-2xl w-full p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-[var(--text-primary)]">
@@ -220,7 +220,7 @@ export default function BanPickWaitingModal({
         {session && !loading && !error && (
           <div className="space-y-6">
             {/* Info Text */}
-            <div className="bg-[var(--bg)] p-4 rounded-lg border border-[var(--border-color)]">
+            <div className="bg-[var(--background)] p-4 rounded-lg border border-[var(--border)]/30">
               <p className="text-sm text-[var(--text-muted)] text-center">
                 양 팀에서 각 1명씩 참여해야 밴픽이 시작됩니다.
               </p>
@@ -229,7 +229,7 @@ export default function BanPickWaitingModal({
             {/* Teams */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Team 1 */}
-              <div className="bg-[var(--bg)] p-6 rounded-lg border border-[var(--border-color)]">
+              <div className="bg-[var(--background)] p-6 rounded-lg border border-[var(--border)]/30">
                 <h3 className="text-lg font-bold text-[var(--accent-purple)] mb-4 text-center">
                   Team 1
                 </h3>
@@ -275,7 +275,7 @@ export default function BanPickWaitingModal({
               </div>
 
               {/* Team 2 */}
-              <div className="bg-[var(--bg)] p-6 rounded-lg border border-[var(--border-color)]">
+              <div className="bg-[var(--background)] p-6 rounded-lg border border-[var(--border)]/30">
                 <h3 className="text-lg font-bold text-[var(--accent-blue)] mb-4 text-center">
                   Team 2
                 </h3>
