@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { fetchWithAuth } from "../../../../../contexts/AuthContext";
 import { Champion, SessionData } from "@/app/components/banpick/types";
-import CurrentTurnIndicator from "@/app/components/banpick/CurrentTurnIndicator";
 import TeamBanPickPanel from "@/app/components/banpick/TeamBanPickPanel";
 import ChampionGrid from "@/app/components/banpick/ChampionGrid";
 
@@ -22,6 +21,7 @@ export default function BanPickPage() {
   const [userId, setUserId] = useState<string>("");
   const [actionLoading, setActionLoading] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [previewChampion, setPreviewChampion] = useState<Champion | null>(null);
 
   // Use refs to track session status
   const sessionStatusRef = useRef<string | null>(null);
@@ -63,28 +63,79 @@ export default function BanPickPage() {
     };
   }, [poolId, matchId]);
 
+  // WebSocket connection for real-time updates
   useEffect(() => {
-    if (!session) return;
+    if (!session || isCompleted) return;
+    if (session.status !== "IN_PROGRESS") return;
 
-    // Don't poll if already marked as completed
-    if (isCompleted) return;
+    // Connect to WebSocket server
+    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || `ws://localhost:8080`;
+    const ws = new WebSocket(wsUrl);
 
-    // Poll for updates every 2 seconds while in progress
-    if (session.status === "IN_PROGRESS") {
-      const interval = setInterval(() => {
-        fetchSession();
-      }, 2000);
+    ws.onopen = () => {
+      console.log('[WebSocket] Connected to ban/pick server');
+      // Join the match room
+      ws.send(JSON.stringify({
+        type: 'join',
+        matchId: matchId
+      }));
+    };
 
-      return () => clearInterval(interval);
-    }
+    ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        console.log('[WebSocket] Received message:', data.type);
 
-    // Redirect to matches page when complete
-    if (session.status === "COMPLETED") {
+        if (data.type === 'update' && data.session) {
+          console.log('[WebSocket] Session update:', {
+            step: data.session.currentStep,
+            turn: data.session.currentTurn,
+            phase: data.session.currentPhase,
+            bans: data.session.bans.length,
+            picks: data.session.picks.length
+          });
+          setSession(data.session);
+
+          // Check if draft is completed
+          if (data.session.status === "COMPLETED") {
+            console.log('[WebSocket] Draft completed via WebSocket');
+            setIsCompleted(true);
+            setTimeout(() => {
+              router.push(`/pools/${poolId}/matches`);
+            }, 3000);
+          }
+        }
+      } catch (error) {
+        console.error('[WebSocket] Error parsing message:', error);
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error('[WebSocket] Error:', error);
+    };
+
+    ws.onclose = () => {
+      console.log('[WebSocket] Disconnected from ban/pick server');
+    };
+
+    // Cleanup on unmount
+    return () => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'leave', matchId }));
+        ws.close();
+      }
+    };
+  }, [session?.status, isCompleted, matchId, poolId, router]);
+
+  // Handle redirect when completed
+  useEffect(() => {
+    if (session?.status === "COMPLETED" && !isCompleted) {
+      setIsCompleted(true);
       setTimeout(() => {
         router.push(`/pools/${poolId}/matches`);
       }, 3000);
     }
-  }, [session?.status, isCompleted]);
+  }, [session?.status, isCompleted, poolId, router]);
 
   const fetchUser = async () => {
     try {
@@ -248,6 +299,7 @@ export default function BanPickPage() {
 
       if (res.ok) {
         const data = await res.json();
+        console.log("[BanPick] Action successful, waiting for WebSocket update...");
 
         // Check if draft is completed
         if (data.data.completed) {
@@ -257,10 +309,8 @@ export default function BanPickPage() {
           setTimeout(() => {
             router.push(`/pools/${poolId}/matches`);
           }, 3000);
-        } else {
-          // Refresh session immediately
-          await fetchSession();
         }
+        // Note: Session update will come via WebSocket, no need to fetch manually
       } else {
         const data = await res.json();
         alert(data.error || "밴/픽에 실패했습니다.");
@@ -390,6 +440,9 @@ export default function BanPickPage() {
     );
   }
 
+  // Determine user's team
+  const myTeam = userId === session.team1ParticipantId ? 1 : userId === session.team2ParticipantId ? 2 : null;
+
   return (
     <div className="h-screen flex flex-col max-w-[1920px] mx-auto px-6 py-4">
       {/* Header */}
@@ -413,22 +466,16 @@ export default function BanPickPage() {
         </h1>
       </div>
 
-      {/* Current Turn Indicator */}
-      <div className="flex-shrink-0">
-        <CurrentTurnIndicator
-          currentAction={getCurrentAction()}
-          isMyTurn={isMyTurn()}
-        />
-      </div>
-
       {/* Ban-Pick Grid */}
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[2fr_1.5fr_2fr] gap-4 min-h-0">
         {/* Team 1 Bans & Picks */}
         <TeamBanPickPanel
           teamNumber={1}
           teamName="Team 1"
-          accentColor="text-[var(--accent-purple)]"
+          accentColor="text-[var(--accent-blue)]"
           session={session}
+          isMyTeam={myTeam === 1}
+          previewChampion={session.currentTurn === 1 ? previewChampion : null}
         />
 
         {/* Center - Champion Select Area */}
@@ -438,6 +485,7 @@ export default function BanPickPage() {
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
           onChampionSelect={handleChampionAction}
+          onSelectionChange={setPreviewChampion}
           isMyTurn={isMyTurn()}
           actionLoading={actionLoading}
         />
@@ -446,8 +494,10 @@ export default function BanPickPage() {
         <TeamBanPickPanel
           teamNumber={2}
           teamName="Team 2"
-          accentColor="text-[var(--accent-blue)]"
+          accentColor="text-[var(--accent-pink)]"
           session={session}
+          isMyTeam={myTeam === 2}
+          previewChampion={session.currentTurn === 2 ? previewChampion : null}
         />
       </div>
     </div>

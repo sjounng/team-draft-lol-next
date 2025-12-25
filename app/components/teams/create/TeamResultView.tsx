@@ -271,8 +271,8 @@ export default function TeamResultView({
           teamName="팀 1"
           teamPlayers={displayTeam1}
           teamScore={team1Score}
-          accentColor="text-[var(--accent-purple)]"
-          accentColorVar="var(--accent-purple)"
+          accentColor="text-[var(--accent-blue)]"
+          accentColorVar="var(--accent-blue)"
           isManualMode={isManualMode}
           team="team1"
           draggedItem={draggedItem}
@@ -289,8 +289,8 @@ export default function TeamResultView({
           teamName="팀 2"
           teamPlayers={displayTeam2}
           teamScore={team2Score}
-          accentColor="text-[var(--accent-blue)]"
-          accentColorVar="var(--accent-blue)"
+          accentColor="text-[var(--accent-pink)]"
+          accentColorVar="var(--accent-pink)"
           isManualMode={isManualMode}
           team="team2"
           draggedItem={draggedItem}

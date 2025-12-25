@@ -17,8 +17,8 @@ export default function WinnerSelection({
           onClick={() => onSelectWinner(true)}
           className={`flex-1 py-4 rounded-lg font-semibold transition-all ${
             team1Won === true
-              ? "bg-[var(--accent-purple)] text-white"
-              : "bg-[var(--surface)] border border-[var(--border)]/30 text-[var(--text-primary)] hover:border-[var(--accent-purple)]/50"
+              ? "bg-[var(--accent-blue)] text-white"
+              : "bg-[var(--surface)] border border-[var(--border)]/30 text-[var(--text-primary)] hover:border-[var(--accent-blue)]/50"
           }`}
         >
           Team 1 승리
@@ -27,8 +27,8 @@ export default function WinnerSelection({
           onClick={() => onSelectWinner(false)}
           className={`flex-1 py-4 rounded-lg font-semibold transition-all ${
             team1Won === false
-              ? "bg-[var(--accent-blue)] text-white"
-              : "bg-[var(--surface)] border border-[var(--border)]/30 text-[var(--text-primary)] hover:border-[var(--accent-blue)]/50"
+              ? "bg-[var(--accent-pink)] text-white"
+              : "bg-[var(--surface)] border border-[var(--border)]/30 text-[var(--text-primary)] hover:border-[var(--accent-pink)]/50"
           }`}
         >
           Team 2 승리

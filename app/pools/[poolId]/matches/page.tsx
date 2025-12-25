@@ -450,7 +450,7 @@ export default function MatchesPage() {
                                 stats={stats}
                                 matchStatus={match.status}
                                 positionLabel={POSITION_LABELS[player.assignedPosition]}
-                                accentColor="text-[var(--accent-purple)]"
+                                accentColor="text-[var(--accent-blue)]"
                               />
                             );
                           })}
@@ -480,7 +480,7 @@ export default function MatchesPage() {
                                 stats={stats}
                                 matchStatus={match.status}
                                 positionLabel={POSITION_LABELS[player.assignedPosition]}
-                                accentColor="text-[var(--accent-blue)]"
+                                accentColor="text-[var(--accent-pink)]"
                               />
                             );
                           })}

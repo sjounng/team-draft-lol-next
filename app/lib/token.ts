@@ -49,6 +49,12 @@ export function verifyAccessToken(token: string): TokenPayload | null {
     const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET) as TokenPayload
     return decoded
   } catch (error) {
+    // Token expiration is normal, don't log as error
+    if (error instanceof jwt.TokenExpiredError) {
+      // Silently return null, refresh token will handle it
+      return null
+    }
+    // Only log actual errors (invalid signature, malformed token, etc.)
     console.error('Access token verification failed:', error)
     return null
   }
@@ -62,6 +68,12 @@ export function verifyRefreshToken(token: string): RefreshTokenPayload | null {
     const decoded = jwt.verify(token, REFRESH_TOKEN_SECRET) as RefreshTokenPayload
     return decoded
   } catch (error) {
+    // Token expiration is normal, don't log as error
+    if (error instanceof jwt.TokenExpiredError) {
+      // Silently return null, user will need to login again
+      return null
+    }
+    // Only log actual errors (invalid signature, malformed token, etc.)
     console.error('Refresh token verification failed:', error)
     return null
   }

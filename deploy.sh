@@ -32,16 +32,24 @@ cp -r public .next/standalone/ 2>/dev/null || true
 cp -r .next/static .next/standalone/.next/ 2>/dev/null || true
 
 # PM2로 애플리케이션 재시작
-echo "🔄 Restarting application with PM2..."
+echo "🔄 Restarting Next.js application with PM2..."
 pm2 restart team-draft-app || pm2 start node --name "team-draft-app" -- .next/standalone/server.js
+
+# PM2로 WebSocket 서버 재시작
+echo "🔄 Restarting WebSocket server with PM2..."
+pm2 restart team-draft-ws || pm2 start ws-server.js --name "team-draft-ws"
 
 # PM2 상태 확인
 echo "✅ Application status:"
 pm2 status
 
 # 로그 확인 (5초간)
-echo "📋 Checking logs..."
-pm2 logs team-draft-app --lines 20 --nostream
+echo "📋 Checking Next.js logs..."
+pm2 logs team-draft-app --lines 10 --nostream
+
+echo "📋 Checking WebSocket server logs..."
+pm2 logs team-draft-ws --lines 10 --nostream
 
 echo "🎉 Deployment completed!"
-echo "📍 Application running at: http://localhost:3000"
+echo "📍 Next.js application running at: http://localhost:3000"
+echo "📍 WebSocket server running at: ws://localhost:8080"

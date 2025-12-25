@@ -27,7 +27,7 @@ export default function TeamStatsInput({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Team 1 Stats */}
         <div>
-          <h3 className="font-semibold text-[var(--accent-purple)] mb-3">
+          <h3 className="font-semibold text-[var(--accent-blue)] mb-3">
             Team 1
           </h3>
           <div className="space-y-3">
@@ -62,7 +62,7 @@ export default function TeamStatsInput({
 
         {/* Team 2 Stats */}
         <div>
-          <h3 className="font-semibold text-[var(--accent-blue)] mb-3">
+          <h3 className="font-semibold text-[var(--accent-pink)] mb-3">
             Team 2
           </h3>
           <div className="space-y-3">

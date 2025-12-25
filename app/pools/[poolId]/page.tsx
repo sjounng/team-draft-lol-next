@@ -67,35 +67,45 @@ export default function PoolDetailPage() {
 
   const fetchAllData = async () => {
     try {
-      // Fetch all data in parallel
-      const [poolRes, requestsRes, matchCountRes] = await Promise.all([
-        fetchWithAuth(`/api/pools/${poolId}`),
-        fetchWithAuth(`/api/pools/${poolId}/requests`),
-        fetchWithAuth(`/api/pools/${poolId}/matches/count`)
-      ]);
+      // First, fetch pool data to check ownership
+      const poolRes = await fetchWithAuth(`/api/pools/${poolId}`);
 
       // Handle pool data
       if (poolRes.ok) {
         const poolData = await poolRes.json();
         setPool(poolData.data);
+
+        // Fetch additional data in parallel
+        const promises = [
+          fetchWithAuth(`/api/pools/${poolId}/matches/count`)
+        ];
+
+        // Only fetch requests if user is the pool owner
+        if (user && poolData.data.ownerId === user.id) {
+          promises.push(fetchWithAuth(`/api/pools/${poolId}/requests`));
+        }
+
+        const results = await Promise.all(promises);
+        const matchCountRes = results[0];
+        const requestsRes = results[1]; // undefined if not owner
+
+        // Handle match count
+        if (matchCountRes.ok) {
+          const matchData = await matchCountRes.json();
+          setMatchCount(matchData.data.count);
+        }
+
+        // Handle pending requests (only for owners)
+        if (requestsRes && requestsRes.ok) {
+          const requestsData = await requestsRes.json();
+          setPendingRequestCount(requestsData.data.length);
+        }
       } else if (poolRes.status === 403) {
         setError("이 Pool에 접근할 권한이 없습니다.");
       } else if (poolRes.status === 404) {
         setError("Pool을 찾을 수 없습니다.");
       } else {
         setError("Pool을 불러오는 중 오류가 발생했습니다.");
-      }
-
-      // Handle pending requests
-      if (requestsRes.ok) {
-        const requestsData = await requestsRes.json();
-        setPendingRequestCount(requestsData.data.length);
-      }
-
-      // Handle match count
-      if (matchCountRes.ok) {
-        const matchData = await matchCountRes.json();
-        setMatchCount(matchData.data.count);
       }
     } catch (err) {
       console.error("Error fetching data:", err);
@@ -183,6 +193,7 @@ export default function PoolDetailPage() {
         isOwner={isOwner}
         pendingRequestCount={pendingRequestCount}
         onRequestsClick={() => setShowRequestsModal(true)}
+        onMatchClick={() => router.push(`/pools/${poolId}/matches`)}
       />
 
       <MemberList

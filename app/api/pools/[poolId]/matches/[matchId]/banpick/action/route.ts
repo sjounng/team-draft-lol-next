@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { prisma } from '@/app/lib/prisma'
 import { getCurrentUserId } from '@/app/lib/auth'
 import { successResponse, errorResponse, unauthorizedResponse } from '@/app/lib/api-response'
+import { broadcastSessionUpdate } from '@/app/lib/websocket-client'
 
 // Ban/Pick order configuration (Custom Draft Order)
 // Global steps 0-19 representing entire ban-pick flow:
@@ -124,26 +125,24 @@ export async function POST(
         return errorResponse('이미 픽된 챔피언입니다.', 400)
       }
 
-      // Determine which player should pick (based on team and position)
-      const teamPlayers = session.gameRecord.userRecords.filter(
-        (record) => record.teamNumber === session.currentTurn
-      )
+      // Assign picks to positions in fixed order: TOP, JGL, MID, ADC, SUP
+      const POSITION_ORDER = ['TOP', 'JGL', 'MID', 'ADC', 'SUP']
 
-      // Get players who haven't picked yet
+      // Get current team's picks count
       const teamPicks = picks.filter((p: any) => p.teamNumber === session.currentTurn)
-      const unpickedPlayer = teamPlayers.find(
-        (player) => !teamPicks.some((p: any) => p.userId === player.userId)
-      )
+      const pickIndex = teamPicks.length // 0-4 for 5 picks
 
-      if (!unpickedPlayer) {
-        return errorResponse('모든 플레이어가 픽을 완료했습니다.', 400)
+      if (pickIndex >= POSITION_ORDER.length) {
+        return errorResponse('모든 포지션에 픽이 완료되었습니다.', 400)
       }
 
-      // Add pick
+      const position = POSITION_ORDER[pickIndex]
+
+      // Add pick (userId will be null - to be assigned later)
       picks.push({
         teamNumber: session.currentTurn,
-        userId: unpickedPlayer.userId,
-        position: unpickedPlayer.assignedPosition,
+        userId: null,
+        position: position,
         championId,
         championName,
       })
@@ -159,22 +158,31 @@ export async function POST(
       // Draft complete - use transaction to ensure all updates succeed
       console.log(`[BanPickAction] Draft completed, saving data and deleting session`)
 
-      await prisma.$transaction(async (tx) => {
-        // Update UserGameRecords with champion info
-        for (const pick of picks) {
-          await tx.userGameRecord.updateMany({
-            where: {
-              gameId: matchId,
-              userId: pick.userId,
-            },
-            data: {
-              championId: pick.championId,
-              championName: pick.championName,
-            },
-          })
-        }
+      // Broadcast completion BEFORE deleting session
+      const team1Data = JSON.parse(session.gameRecord.team1Data)
+      const team2Data = JSON.parse(session.gameRecord.team2Data)
 
+      const completedSession = {
+        sessionId: session.sessionId.toString(),
+        gameId: session.gameId.toString(),
+        team1ParticipantId: session.team1ParticipantId,
+        team2ParticipantId: session.team2ParticipantId,
+        status: 'COMPLETED',
+        currentTurn: session.currentTurn,
+        currentPhase: session.currentPhase,
+        currentStep: nextStep,
+        bans,
+        picks,
+        team1Data,
+        team2Data,
+      }
+
+      await broadcastSessionUpdate(matchIdParam, completedSession)
+
+      await prisma.$transaction(async (tx) => {
         // Update GameRecord with ban/pick data and status
+        // Note: Champions are assigned to positions (TOP, JGL, MID, ADC, SUP)
+        // Users will be manually assigned to champions later
         await tx.gameRecord.update({
           where: { gameId: matchId },
           data: {
@@ -208,6 +216,27 @@ export async function POST(
           status,
         },
       })
+
+      // Broadcast updated session to all connected clients via WebSocket
+      const team1Data = JSON.parse(session.gameRecord.team1Data)
+      const team2Data = JSON.parse(session.gameRecord.team2Data)
+
+      const updatedSession = {
+        sessionId: session.sessionId.toString(),
+        gameId: session.gameId.toString(),
+        team1ParticipantId: session.team1ParticipantId,
+        team2ParticipantId: session.team2ParticipantId,
+        status,
+        currentTurn: nextTurn,
+        currentPhase: nextPhase,
+        currentStep: nextStep,
+        bans,
+        picks,
+        team1Data,
+        team2Data,
+      }
+
+      await broadcastSessionUpdate(matchIdParam, updatedSession)
 
       return successResponse({ bans, picks, status, nextPhase })
     }

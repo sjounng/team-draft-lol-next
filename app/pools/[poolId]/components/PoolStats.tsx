@@ -4,6 +4,7 @@ interface PoolStatsProps {
   isOwner: boolean;
   pendingRequestCount: number;
   onRequestsClick: () => void;
+  onMatchClick: () => void;
 }
 
 export default function PoolStats({
@@ -12,6 +13,7 @@ export default function PoolStats({
   isOwner,
   pendingRequestCount,
   onRequestsClick,
+  onMatchClick,
 }: PoolStatsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -41,7 +43,10 @@ export default function PoolStats({
         </div>
       </div>
 
-      <div className="card">
+      <button
+        onClick={onMatchClick}
+        className="card hover:border-[var(--accent-blue)] transition-colors cursor-pointer text-left w-full"
+      >
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-[var(--text-muted)] mb-1">전적 개수</p>
@@ -65,7 +70,7 @@ export default function PoolStats({
             </svg>
           </div>
         </div>
-      </div>
+      </button>
 
       <button
         onClick={onRequestsClick}
